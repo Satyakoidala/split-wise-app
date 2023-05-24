@@ -1,19 +1,14 @@
 import React from "react";
-import "./app.scss";
-import timeline from "./assets/timeline.png";
-import workExperience from "./assets/workExperience.webp";
+import "./App.scss";
+
+// import CashInput from "./components/UserActions";
+import ActionTray from "./components/UserSection";
 
 const App = () => {
 	return (
 		<>
-			<h1 className="header">
-				Welcome to React App thats build using Webpack and Babel
-				separately
-			</h1>
-
-			<img width="40" height="40" src={timeline} alt="timeline" />
-			<img width={50} height={50} src={workExperience} alt="work exp" />
-			<div> Testing </div>
+			<h1>Welcome to SplitWise App</h1>
+			<ActionTray />
 		</>
 	);
 };
