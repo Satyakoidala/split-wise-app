@@ -16,5 +16,6 @@ module.exports = {
 		"arrow-body-style": "off",
 		"react/prop-types": "off",
 		"react/self-closing-comp": "off",
+		"no-console": "off",
 	},
 };

@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import CashInput from "./UserActions";
+import React, { useEffect, useRef, useState } from "react";
+import TransactionsInput from "./UserActions";
 
 const useActionTray = () => {
 	const [noOfUsers, setNoOfUsers] = useState(0);
@@ -31,6 +31,8 @@ const useActionTray = () => {
 				})
 			);
 		}
+
+		return usr;
 	};
 
 	const addTransaction = (idx, amount, purchaseInfoText) => {
@@ -48,6 +50,7 @@ const useActionTray = () => {
 					transactions: [
 						...usr.transactions,
 						{
+							transactionID: usr.transactions.length + 1,
 							amount,
 							purchaseInfo: `${purchaseInfoText}`,
 						},
@@ -57,16 +60,68 @@ const useActionTray = () => {
 		}
 	};
 
-	return { noOfUsers, users, addUser, removeUser, addTransaction };
+	const removeTransaction = (idx, transactionID) => {
+		const usr = users.find((x) => {
+			return idx === x.idx;
+		});
+
+		const updatedTransactions = usr.transactions.filter((tr) => {
+			return transactionID !== tr.transactionID;
+		});
+
+		console.log(updatedTransactions);
+
+		if (usr !== undefined) {
+			setUsers([
+				...users.filter((x) => {
+					return idx !== x.idx;
+				}),
+				{
+					...usr,
+					transactions: updatedTransactions,
+				},
+			]);
+		}
+	};
+
+	return {
+		noOfUsers,
+		users,
+		addUser,
+		removeUser,
+		addTransaction,
+		removeTransaction,
+	};
 };
 
 const ActionTray = () => {
 	const userSectionRef = useRef();
 	const [totalExpense, setTotalExpense] = useState(0);
-	const { noOfUsers, users, addUser, addTransaction } = useActionTray();
+	const {
+		noOfUsers,
+		users,
+		addUser,
+		addTransaction,
+		removeUser,
+		removeTransaction,
+	} = useActionTray();
 	const [showUserInput, toggleShowUserInput] = useState(false);
 	const [name, setName] = useState("");
 	const nameRef = useRef();
+
+	useEffect(() => {
+		console.log(users);
+	}, [users]);
+
+	const onDeleteUser = (id) => {
+		const removedUser = removeUser(id);
+
+		const totalAmount = removedUser.transactions.reduce((total, tr) => {
+			return total + tr.amount;
+		}, 0);
+
+		setTotalExpense(totalExpense - totalAmount);
+	};
 
 	const onAddUser = (ev) => {
 		ev.stopPropagation();
@@ -95,8 +150,18 @@ const ActionTray = () => {
 			<div className="users" id="users" ref={userSectionRef}>
 				{users.map((user) => {
 					return (
-						<>
-							<CashInput
+						<div className="user-view" key={user.idx}>
+							<button
+								type="button"
+								className="delete-usr"
+								onClick={(ev) => {
+									ev.stopPropagation();
+									onDeleteUser(user.idx);
+								}}
+							>
+								X
+							</button>
+							<TransactionsInput
 								key={user.idx}
 								username={user.name}
 								updateTotalExpense={(amount) => {
@@ -109,20 +174,13 @@ const ActionTray = () => {
 										purchaseInfo
 									);
 								}}
+								transactions={user.transactions}
+								deleteTransaction={(transactionID, amount) => {
+									removeTransaction(user.idx, transactionID);
+									setTotalExpense(totalExpense - amount);
+								}}
 							/>
-							<div className="transactions-list">
-								<ul className="user-transactions">
-									{user.transactions.map((tr) => {
-										return (
-											<li>
-												{tr.purchaseInfo}: {tr.amount}{" "}
-												rupees.
-											</li>
-										);
-									})}
-								</ul>
-							</div>
-						</>
+						</div>
 					);
 				})}
 			</div>

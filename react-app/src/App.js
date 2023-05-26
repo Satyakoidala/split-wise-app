@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.scss";
 
-// import CashInput from "./components/UserActions";
+// import TransactionsInput from "./components/UserActions";
 import ActionTray from "./components/UserSection";
 
 const App = () => {
