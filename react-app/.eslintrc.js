@@ -17,5 +17,7 @@ module.exports = {
 		"react/prop-types": "off",
 		"react/self-closing-comp": "off",
 		"no-console": "off",
+		"no-nested-ternary": "off",
+		"import/no-extraneous-dependencies": "off",
 	},
 };

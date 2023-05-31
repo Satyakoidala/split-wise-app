@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
+import cn from "classnames";
 import TransactionsInput from "./UserActions";
+
+import "./UserSection.scss";
 
 const useActionTray = () => {
 	const [noOfUsers, setNoOfUsers] = useState(0);
@@ -42,9 +45,10 @@ const useActionTray = () => {
 
 		if (usr !== undefined) {
 			setUsers([
-				...users.filter((x) => {
-					return idx !== x.idx;
-				}),
+				// ...users.filter((x) => {
+				// 	return idx !== x.idx;
+				// }),
+				...users.slice(0, idx - 1),
 				{
 					...usr,
 					transactions: [
@@ -56,6 +60,7 @@ const useActionTray = () => {
 						},
 					],
 				},
+				...users.slice(idx),
 			]);
 		}
 	};
@@ -73,13 +78,12 @@ const useActionTray = () => {
 
 		if (usr !== undefined) {
 			setUsers([
-				...users.filter((x) => {
-					return idx !== x.idx;
-				}),
+				...users.slice(0, idx - 1),
 				{
 					...usr,
 					transactions: updatedTransactions,
 				},
+				...users.slice(idx),
 			]);
 		}
 	};
@@ -146,95 +150,140 @@ const ActionTray = () => {
 	};
 
 	return (
-		<>
-			<div className="users" id="users" ref={userSectionRef}>
-				{users.map((user) => {
-					return (
-						<div className="user-view" key={user.idx}>
-							<button
-								type="button"
-								className="delete-usr"
-								onClick={(ev) => {
-									ev.stopPropagation();
-									onDeleteUser(user.idx);
-								}}
-							>
-								X
-							</button>
-							<TransactionsInput
-								key={user.idx}
-								username={user.name}
-								updateTotalExpense={(amount) => {
-									setTotalExpense(totalExpense + amount);
-								}}
-								updateTransactions={(amount, purchaseInfo) => {
-									addTransaction(
-										user.idx,
-										amount,
-										purchaseInfo
-									);
-								}}
-								transactions={user.transactions}
-								deleteTransaction={(transactionID, amount) => {
-									removeTransaction(user.idx, transactionID);
-									setTotalExpense(totalExpense - amount);
-								}}
-							/>
-						</div>
-					);
-				})}
+		<div className="split-wise-app">
+			<div className="usersAndActions">
+				{noOfUsers > 0 ? (
+					<div
+						className="users block"
+						id="users"
+						ref={userSectionRef}
+					>
+						{users.map((user) => {
+							return (
+								<div
+									className={cn(
+										"user-view",
+										`user-${user.idx}`
+									)}
+									key={user.idx}
+								>
+									<button
+										type="button"
+										className="delete-usr"
+										onClick={(ev) => {
+											ev.stopPropagation();
+											onDeleteUser(user.idx);
+										}}
+									>
+										X
+									</button>
+									<TransactionsInput
+										key={user.idx}
+										username={user.name}
+										updateTotalExpense={(amount) => {
+											setTotalExpense(
+												totalExpense + amount
+											);
+										}}
+										updateTransactions={(
+											amount,
+											purchaseInfo
+										) => {
+											addTransaction(
+												user.idx,
+												amount,
+												purchaseInfo
+											);
+										}}
+										transactions={user.transactions}
+										deleteTransaction={(
+											transactionID,
+											amount
+										) => {
+											removeTransaction(
+												user.idx,
+												transactionID
+											);
+											setTotalExpense(
+												totalExpense - amount
+											);
+										}}
+									/>
+								</div>
+							);
+						})}
+					</div>
+				) : !showUserInput ? (
+					<div className="intro suggestions block">
+						Add your buddy, and note their expenses. <br />
+						<br />
+						Remember, you can split the bills but not the
+						friendship.
+					</div>
+				) : (
+					<div className="user-encouragement suggestions block">
+						Yes! You are on track!! Thats it! Add your buddy!
+					</div>
+				)}
+				{showUserInput && (
+					<div className="add-user-section d-flex">
+						{/* <div className=""> */}
+						<input
+							ref={nameRef}
+							type="text"
+							placeholder="Type Name here.."
+							onChangeCapture={(e) => {
+								e.stopPropagation();
+								setName(e.target.value);
+							}}
+						/>
+						{/* </div> */}
+						{/* <div className="user-action-buttons"> */}
+						<button
+							className="save-btn"
+							type="button"
+							onClick={(ev) => {
+								onSave(ev);
+							}}
+						>
+							Save
+						</button>
+						<button
+							className="cancel-btn"
+							type="button"
+							onClick={(ev) => {
+								onCancel(ev);
+							}}
+						>
+							Cancel
+						</button>
+						{/* </div> */}
+					</div>
+				)}
+				{!showUserInput && (
+					<button
+						className="add-user-btn"
+						type="button"
+						onClick={(ev) => {
+							onAddUser(ev);
+						}}
+					>
+						Add Your Buddy
+					</button>
+				)}
 			</div>
-			{showUserInput && (
-				<div className="add-user-section">
-					<input
-						ref={nameRef}
-						type="text"
-						placeholder="Type Name here.."
-						onChangeCapture={(e) => {
-							e.stopPropagation();
-							setName(e.target.value);
-						}}
-					/>
-					<button
-						type="button"
-						onClick={(ev) => {
-							onSave(ev);
-						}}
-					>
-						Save
-					</button>
-					<button
-						type="button"
-						onClick={(ev) => {
-							onCancel(ev);
-						}}
-					>
-						Cancel
-					</button>
-				</div>
-			)}
-			{!showUserInput && (
-				<button
-					type="button"
-					onClick={(ev) => {
-						onAddUser(ev);
-					}}
-				>
-					Add User
-				</button>
-			)}
-			<div className="expenses-summary">
-				<div className="total-expense">
+			<div className="expenses-summary column-50">
+				<div className="total-expense left">
 					Total Expenses: {totalExpense} rupees.
 				</div>
 				{noOfUsers > 0 && (
-					<div className="avg-expense">
+					<div className="avg-expense right">
 						Average Expenses per head: {totalExpense / noOfUsers}{" "}
 						rupees.
 					</div>
 				)}
 			</div>
-		</>
+		</div>
 	);
 };
 
