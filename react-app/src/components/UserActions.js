@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import cn from "classnames";
 
 import "./UserAction.scss";
 
@@ -6,58 +7,82 @@ export const TransactionsList = ({
 	transactions = [],
 	deleteTransaction = (f) => f,
 }) => {
-	return (
-		<div className="transactions-list-table">
-			{transactions.length > 0 && (
-				<>
-					<div className="transaction-header d-flex">
-						<h3>Purchase Info</h3>
-						<h3>Amount</h3>
-						<h3>Delete</h3>
-					</div>
-					<ul className="user-transactions">
-						{transactions.map((tr) => {
-							return (
-								<li
-									className="transaction-row d-flex"
-									key={tr.transactionID}
-								>
-									<span className="transaction-info">
-										{tr.purchaseInfo}
-									</span>
-									<span className="transaction-amount">
-										Rs. {tr.amount}
-									</span>
-									<button
-										type="button"
-										className="delete-btn"
-										value={tr.transactionID}
-										onClick={(ev) => {
-											ev.stopPropagation();
+	return transactions.length > 0 ? (
+		<table className="transactions-list-table">
+			<thead className="transaction-header">
+				<tr>
+					<th>Purchase Info</th>
+					<th>Amount</th>
+					<th>Delete</th>
+				</tr>
+			</thead>
+			<tbody className="user-transactions">
+				{transactions.map((tr) => {
+					return (
+						<tr className="transaction-row" key={tr.transactionID}>
+							<td className="transaction-info">
+								{tr.purchaseInfo}
+							</td>
+							<td className="transaction-amount">
+								Rs. {tr.amount}
+							</td>
+							<td>
+								<button
+									type="button"
+									className="delete-btn"
+									value={tr.transactionID}
+									onClick={(ev) => {
+										ev.stopPropagation();
 
-											deleteTransaction(
-												Number.parseInt(
-													ev.target.value,
-													10
-												),
-												tr.amount
-											);
-										}}
+										deleteTransaction(
+											Number.parseInt(
+												ev.target.value,
+												10
+											),
+											tr.amount
+										);
+									}}
+								>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="20"
+										height="20"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="rgb(213, 32, 47)"
+										strokeWidth="2"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										className="feather feather-trash-2"
 									>
-										X
-									</button>
-								</li>
-							);
-						})}
-					</ul>
-				</>
-			)}
-		</div>
-	);
+										<polyline points="3 6 5 6 21 6"></polyline>
+										<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+										<line
+											x1="10"
+											y1="11"
+											x2="10"
+											y2="17"
+										></line>
+										<line
+											x1="14"
+											y1="11"
+											x2="14"
+											y2="17"
+										></line>
+									</svg>
+								</button>
+							</td>
+						</tr>
+					);
+				})}
+			</tbody>
+		</table>
+	) : null;
 };
 
 const TransactionsInput = ({
 	username = "User",
+	avg,
 	updateTotalExpense = (f) => f,
 	updateTransactions = (f) => f,
 	transactions = [],
@@ -99,15 +124,14 @@ const TransactionsInput = ({
 	return (
 		<>
 			<div className="user">
-				<h3 className="username">{username}</h3>
-				<div className="d-flex">
+				<h2 className="username">{username}</h2>
+				<div className="purchase-input d-flex">
 					{/* <div className="left"> */}
 					<input
 						ref={purchaseInfoRef}
 						type="text"
 						maxLength={50}
 						placeholder="Enter Purchase Info"
-						style={{ width: 200 }}
 						onChangeCapture={(e) => {
 							handlePurchaseInfoInput(e);
 						}}
@@ -125,7 +149,6 @@ const TransactionsInput = ({
 						min={1}
 						max={10000}
 						placeholder="Enter amount"
-						style={{ width: 200 }}
 						onChangeCapture={(e) => {
 							handleAmountInput(e);
 						}}
@@ -145,12 +168,27 @@ const TransactionsInput = ({
 					</button>
 				</div>
 				<div className="user-total-display d-flex">
-					<span className="total-text">Total Amount Spent:</span>
+					<span className="total-text">Total Amount Spent (INR)</span>
 					<input
+						className="total-amount"
 						type="number"
 						placeholder="Total Amount"
 						value={total}
 						readOnly
+						disabled
+					/>
+					<span className="settlement-text">
+						Pending Settlement (INR)
+					</span>
+					<input
+						type="number"
+						className={cn("balance", {
+							positive: avg - total <= 0,
+							negative: avg - total > 0,
+						})}
+						value={avg - total}
+						readOnly
+						disabled
 					/>
 				</div>
 			</div>

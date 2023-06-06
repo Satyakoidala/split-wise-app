@@ -1,10 +1,16 @@
+@import "../App.scss";
+
 .split-wise-app {
 	width: 80%;
 	margin: 20px auto;
 }
 
-.usersAndActions {
-	margin-block: 50px;
+.users-actions {
+	margin-block: 40px;
+	border-radius: 15px;
+	// border: 2px solid $primary-border;
+	background-color: $secondary-bg;
+	padding: 25px;
 }
 
 .expenses-summary {
@@ -13,7 +19,7 @@
 
 .add-user-section {
 	font-size: 18px;
-	max-width: 430px;
+	max-width: 720px;
 
 	button {
 		margin: 0;
@@ -21,31 +27,24 @@
 	}
 
 	.save-btn {
-		background-color: rgb(96, 228, 96);
+		background-color: $btn-success;
 	}
 
 	.cancel-btn {
-		background-color: rgb(245, 80, 80);
+		background-color: $btn-danger;
 	}
-}
-
-// .user-action-buttons {
-// 	margin: 0;
-
-// }
-
-.block {
-	margin-block: 30px;
 }
 
 .suggestions {
 	font-size: 18px;
 	font-weight: 600;
+	margin-block: 30px;
 }
 
 .user-view {
-	border: 3px solid black;
-	border-radius: 5px;
+	border: 1px solid $primary-border;
+	border-radius: 10px;
+	// background-color: $tertiary-bg;
 	position: relative;
 	padding: 15px;
 	margin-bottom: 30px;
@@ -59,11 +58,10 @@
 	height: 20px;
 	width: 20px;
 	font-size: 8px;
-	color: #000;
+	// color: $tertiary-text;
 	font-weight: 600;
 }
 
 .add-user-btn {
-	background-color: rgb(54, 230, 95);
-	// color: #000;
+	background-color: $btn-success;
 }

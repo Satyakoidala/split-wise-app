@@ -1,3 +1,34 @@
+$primary-bg: rgb(4, 15, 22);
+$secondary-bg: rgba(16, 30, 38, 0.6);
+$tertiary-bg: rgb(242, 242, 242, 0.5);
+$primary-text: rgb(242, 242, 242);
+$tertiary-text: rgb(0, 0, 0);
+$btn-danger: rgb(213, 32, 47);
+$btn-success: rgb(156, 252, 151);
+$primary-border: rgb(41, 149, 57);
+
+@keyframes border-input-anime {
+	25% {
+		border-right: 2px solid $primary-border;
+		// border-top: 2px solid $primary-border;
+		// border-left: 2px solid $primary-border;
+	}
+	50% {
+		border-top: 2px solid $primary-border;
+		// border-left: 2px solid $primary-border;
+		// border-bottom: 2px solid $primary-border;
+	}
+	75% {
+		border-left: 2px solid $primary-border;
+		// border-bottom: 2px solid $primary-border;
+		// border-right: 2px solid $primary-border;
+	}
+	100% {
+		border-bottom: 2px solid $primary-border;
+		// border-right: 2px solid $primary-border;
+	}
+}
+
 div {
 	margin: 0 auto;
 	text-align: center;
@@ -10,7 +41,8 @@ body {
 	width: 100%;
 	height: auto;
 	font-family: Arial, Helvetica, sans-serif;
-	background-color: rgb(129, 213, 246);
+	background-color: $primary-bg;
+	color: $primary-text;
 }
 
 li {
@@ -25,17 +57,47 @@ li {
 
 input {
 	margin: 0;
-	height: 24px;
-	width: 200px;
+	height: 25px;
+	width: 275px;
+	font-size: 16px;
 	font-weight: 600;
 	border-radius: 4px;
+	text-align: center;
+	background-color: transparent;
+	border: 2px solid rgb(242, 242, 242, 0.8);
+	box-shadow: 0 0 1.5px 1.5px rgb(242, 242, 242, 0.3);
+	transition: border 2s ease;
+	color: $primary-text;
+	padding: 5px;
+
+	&[type="number"]::-webkit-outer-spin-button,
+	&[type="number"]::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+	}
+
+	/* Firefox */
+	input[type="number"] {
+		-moz-appearance: textfield;
+		appearance: textfield;
+	}
+
+	&::after {
+		border: 2px solid $primary-border;
+	}
+
+	&:focus,
+	&:focus-visible {
+		animation: border-input-anime 1s infinite ease-in-out alternate-reverse;
+		outline: none;
+		outline-offset: none;
+	}
 }
 
 button {
 	border-radius: 4px;
-	padding: 4px;
-	color: #f2f2f2;
+	padding: 5px;
 	font-weight: 600;
+	border: none;
 }
 
 .column-50 {
@@ -50,4 +112,9 @@ button {
 .d-flex {
 	display: flex;
 	justify-content: space-evenly;
+	align-items: center;
+}
+
+svg {
+	pointer-events: none;
 }

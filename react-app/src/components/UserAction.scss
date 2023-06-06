@@ -1,8 +1,10 @@
+@import "../App.scss";
+
 .user {
 	margin-bottom: 20px;
 
 	.add-expense-btn {
-		background-color: rgb(96, 228, 96);
+		background-color: $btn-success;
 		margin: 0;
 	}
 
@@ -17,6 +19,48 @@
 
 .user-transactions {
 	.delete-btn {
-		background-color: rgb(245, 80, 80);
+		background-color: transparent;
+	}
+}
+
+.user-total-display {
+	.total-text {
+		padding: auto 0;
+	}
+
+	.total-amount,
+	.balance {
+		border: none;
+		box-shadow: none;
+		border-bottom: 2px solid $primary-text;
+	}
+
+	.balance {
+		&.positive {
+			color: $primary-border;
+			border-color: $primary-border;
+		}
+
+		&.negative {
+			color: $btn-danger;
+			border-color: $btn-danger;
+		}
+	}
+}
+
+.transactions-list-table {
+	margin: 0 auto;
+	border: 2px solid $primary-text;
+	border-radius: 6px;
+	width: 80%;
+	margin-block: 20px;
+
+	thead th {
+		background-color: $primary-border;
+	}
+
+	tbody td {
+		background-color: $primary-text;
+		color: $tertiary-text;
 	}
 }

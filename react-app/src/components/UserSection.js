@@ -151,7 +151,7 @@ const ActionTray = () => {
 
 	return (
 		<div className="split-wise-app">
-			<div className="usersAndActions">
+			<div className="users-actions">
 				{noOfUsers > 0 ? (
 					<div
 						className="users block"
@@ -180,6 +180,9 @@ const ActionTray = () => {
 									<TransactionsInput
 										key={user.idx}
 										username={user.name}
+										avg={Math.round(
+											totalExpense / noOfUsers
+										)}
 										updateTotalExpense={(amount) => {
 											setTotalExpense(
 												totalExpense + amount
@@ -214,14 +217,14 @@ const ActionTray = () => {
 						})}
 					</div>
 				) : !showUserInput ? (
-					<div className="intro suggestions block">
+					<div className="intro suggestions">
 						Add your buddy, and note their expenses. <br />
 						<br />
 						Remember, you can split the bills but not the
 						friendship.
 					</div>
 				) : (
-					<div className="user-encouragement suggestions block">
+					<div className="user-encouragement suggestions">
 						Yes! You are on track!! Thats it! Add your buddy!
 					</div>
 				)}
@@ -274,12 +277,12 @@ const ActionTray = () => {
 			</div>
 			<div className="expenses-summary column-50">
 				<div className="total-expense left">
-					Total Expenses: {totalExpense} rupees.
+					Total Expenses: Rs.{totalExpense}
 				</div>
 				{noOfUsers > 0 && (
 					<div className="avg-expense right">
-						Average Expenses per head: {totalExpense / noOfUsers}{" "}
-						rupees.
+						Average Expenses per head: Rs.
+						{Math.round(totalExpense / noOfUsers)}
 					</div>
 				)}
 			</div>
