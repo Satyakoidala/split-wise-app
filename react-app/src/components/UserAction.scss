@@ -8,7 +8,7 @@
 		margin: 0;
 	}
 
-	.user-total-display {
+	.price-summary {
 		margin-top: 20px;
 	}
 }
@@ -23,7 +23,7 @@
 	}
 }
 
-.user-total-display {
+.price-summary {
 	.total-text {
 		padding: auto 0;
 	}
@@ -33,6 +33,7 @@
 		border: none;
 		box-shadow: none;
 		border-bottom: 2px solid $primary-text;
+		margin-left: 15px;
 	}
 
 	.balance {

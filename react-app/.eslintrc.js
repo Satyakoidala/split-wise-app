@@ -12,6 +12,7 @@ module.exports = {
 	plugins: ["react", "prettier"],
 	rules: {
 		"react/jsx-filename-extension": "off",
+		"react/jsx-props-no-spreading": "off",
 		"react/function-component-definition": "off",
 		"arrow-body-style": "off",
 		"react/prop-types": "off",

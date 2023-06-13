@@ -1,92 +1,174 @@
 import React, { useRef, useState } from "react";
 import cn from "classnames";
 
+import EditOverlay from "./overlay/EditOverlay";
+import ConfirmOverlay from "./overlay/ConfirmOverlay";
+
 import "./UserAction.scss";
 
 export const TransactionsList = ({
 	transactions = [],
 	deleteTransaction = (f) => f,
+	editTransaction = (f) => f,
 }) => {
-	return transactions.length > 0 ? (
-		<table className="transactions-list-table">
-			<thead className="transaction-header">
-				<tr>
-					<th>Purchase Info</th>
-					<th>Amount</th>
-					<th>Delete</th>
-				</tr>
-			</thead>
-			<tbody className="user-transactions">
-				{transactions.map((tr) => {
-					return (
-						<tr className="transaction-row" key={tr.transactionID}>
-							<td className="transaction-info">
-								{tr.purchaseInfo}
-							</td>
-							<td className="transaction-amount">
-								Rs. {tr.amount}
-							</td>
-							<td>
-								<button
-									type="button"
-									className="delete-btn"
-									value={tr.transactionID}
-									onClick={(ev) => {
-										ev.stopPropagation();
+	const [showEditOverlay, toggleShowEditOverlay] = useState(false);
+	const [showDeleteConfirmOverlay, toggleDeleteConfirmOverlay] =
+		useState(false);
+	const currEditTransaction = useRef({});
 
-										deleteTransaction(
-											Number.parseInt(
-												ev.target.value,
-												10
-											),
-											tr.amount
-										);
-									}}
-								>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="rgb(213, 32, 47)"
-										strokeWidth="2"
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										className="feather feather-trash-2"
+	return transactions.length > 0 ? (
+		<>
+			<table className="transactions-list-table">
+				<thead className="transaction-header">
+					<tr>
+						<th>Purchase Info</th>
+						<th>Amount</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody className="user-transactions">
+					{transactions.map((tr) => {
+						return (
+							<tr
+								className="transaction-row"
+								key={tr.transactionID}
+							>
+								<td className="transaction-info">
+									{tr.purchaseInfo}
+								</td>
+								<td className="transaction-amount">
+									Rs. {tr.amount}
+								</td>
+								<td>
+									<button
+										type="button"
+										className="edit-btn"
+										value={tr.transactionID}
+										onClick={(ev) => {
+											ev.stopPropagation();
+
+											toggleShowEditOverlay(true);
+											currEditTransaction.current = {
+												editPurchaseInfo:
+													tr.purchaseInfo,
+												editPurchaseAmount: tr.amount,
+												transactionID: tr.transactionID,
+											};
+										}}
 									>
-										<polyline points="3 6 5 6 21 6"></polyline>
-										<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-										<line
-											x1="10"
-											y1="11"
-											x2="10"
-											y2="17"
-										></line>
-										<line
-											x1="14"
-											y1="11"
-											x2="14"
-											y2="17"
-										></line>
-									</svg>
-								</button>
-							</td>
-						</tr>
-					);
-				})}
-			</tbody>
-		</table>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="20"
+											height="20"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="rgb(0, 130, 211)"
+											strokeWidth="2"
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											className="feather feather-edit"
+										>
+											<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+											<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+										</svg>
+									</button>
+									<button
+										type="button"
+										className="delete-btn"
+										value={tr.transactionID}
+										onClick={(ev) => {
+											ev.stopPropagation();
+
+											toggleDeleteConfirmOverlay(true);
+											currEditTransaction.current = {
+												editPurchaseInfo:
+													tr.purchaseInfo,
+												editPurchaseAmount: tr.amount,
+												transactionID: tr.transactionID,
+											};
+										}}
+									>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="20"
+											height="20"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="rgb(213, 32, 47)"
+											strokeWidth="2"
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											className="feather feather-trash-2"
+										>
+											<polyline points="3 6 5 6 21 6"></polyline>
+											<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+											<line
+												x1="10"
+												y1="11"
+												x2="10"
+												y2="17"
+											></line>
+											<line
+												x1="14"
+												y1="11"
+												x2="14"
+												y2="17"
+											></line>
+										</svg>
+									</button>
+								</td>
+							</tr>
+						);
+					})}
+				</tbody>
+			</table>
+			{showEditOverlay && (
+				<EditOverlay
+					{...currEditTransaction.current}
+					onClose={() => {
+						currEditTransaction.current = {};
+						toggleShowEditOverlay(false);
+					}}
+					onUpdate={(id, amount, info) => {
+						editTransaction(
+							id,
+							amount,
+							info,
+							currEditTransaction.current.editPurchaseAmount
+						);
+						currEditTransaction.current = {};
+						toggleShowEditOverlay(false);
+					}}
+				/>
+			)}
+			{showDeleteConfirmOverlay && (
+				<ConfirmOverlay
+					template="TRANSACTION_DELETE"
+					{...currEditTransaction.current}
+					onClose={() => {
+						currEditTransaction.current = {};
+						toggleDeleteConfirmOverlay(false);
+					}}
+					onDelete={(id, amount) => {
+						deleteTransaction(id, amount);
+
+						currEditTransaction.current = {};
+						toggleDeleteConfirmOverlay(false);
+					}}
+				/>
+			)}
+		</>
 	) : null;
 };
 
 const TransactionsInput = ({
 	username = "User",
 	avg,
-	updateTotalExpense = (f) => f,
-	updateTransactions = (f) => f,
 	transactions = [],
+	updateTotalExpense = (f) => f,
+	addNewTransaction = (f) => f,
 	deleteTransaction = (f) => f,
+	editTransaction = (f) => f,
 }) => {
 	const amountRef = useRef();
 	const purchaseInfoRef = useRef();
@@ -114,7 +196,7 @@ const TransactionsInput = ({
 
 		setTotal(amount + total);
 		updateTotalExpense(amount);
-		updateTransactions(amount, purchaseInfo);
+		addNewTransaction(amount, purchaseInfo);
 		setAmount(0);
 		updatePurchaseInfo("");
 		amountRef.current.value = "";
@@ -167,29 +249,35 @@ const TransactionsInput = ({
 						Add Expense
 					</button>
 				</div>
-				<div className="user-total-display d-flex">
-					<span className="total-text">Total Amount Spent (INR)</span>
-					<input
-						className="total-amount"
-						type="number"
-						placeholder="Total Amount"
-						value={total}
-						readOnly
-						disabled
-					/>
-					<span className="settlement-text">
-						Pending Settlement (INR)
-					</span>
-					<input
-						type="number"
-						className={cn("balance", {
-							positive: avg - total <= 0,
-							negative: avg - total > 0,
-						})}
-						value={avg - total}
-						readOnly
-						disabled
-					/>
+				<div className="price-summary d-flex">
+					<div className="total-price d-flex">
+						<span className="total-text">
+							Total Amount Spent (INR)
+						</span>
+						<input
+							className="total-amount"
+							type="number"
+							placeholder="Total Amount"
+							value={total}
+							readOnly
+							disabled
+						/>
+					</div>
+					<div className="settlement-price d-flex">
+						<span className="settlement-text">
+							Pending Settlement (INR)
+						</span>
+						<input
+							type="number"
+							className={cn("balance", {
+								positive: avg - total <= 0,
+								negative: avg - total > 0,
+							})}
+							value={avg - total}
+							readOnly
+							disabled
+						/>
+					</div>
 				</div>
 			</div>
 			<TransactionsList
@@ -197,6 +285,10 @@ const TransactionsInput = ({
 				deleteTransaction={(transactionID, trAmount) => {
 					deleteTransaction(transactionID, trAmount);
 					setTotal(total - trAmount);
+				}}
+				editTransaction={(transID, newAmount, newInfo, oldAmount) => {
+					editTransaction(transID, newAmount, newInfo);
+					setTotal(total - oldAmount + newAmount);
 				}}
 			/>
 		</>

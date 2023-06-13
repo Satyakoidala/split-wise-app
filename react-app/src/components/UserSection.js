@@ -4,6 +4,12 @@ import TransactionsInput from "./UserActions";
 
 import "./UserSection.scss";
 
+const findUser = (users, id) => {
+	return users.find((x) => {
+		return id === x.idx;
+	});
+};
+
 const useActionTray = () => {
 	const [noOfUsers, setNoOfUsers] = useState(0);
 	const [users, setUsers] = useState([]);
@@ -22,9 +28,7 @@ const useActionTray = () => {
 
 	const removeUser = (idx) => {
 		setNoOfUsers(noOfUsers - 1);
-		const usr = users.find((x) => {
-			return idx === x.idx;
-		});
+		const usr = findUser(users, idx);
 
 		if (usr === undefined) console.log("No User Found!");
 		else {
@@ -39,9 +43,7 @@ const useActionTray = () => {
 	};
 
 	const addTransaction = (idx, amount, purchaseInfoText) => {
-		const usr = users.find((x) => {
-			return idx === x.idx;
-		});
+		const usr = findUser(users, idx);
 
 		if (usr !== undefined) {
 			setUsers([
@@ -66,15 +68,13 @@ const useActionTray = () => {
 	};
 
 	const removeTransaction = (idx, transactionID) => {
-		const usr = users.find((x) => {
-			return idx === x.idx;
-		});
+		const usr = findUser(users, idx);
 
 		const updatedTransactions = usr.transactions.filter((tr) => {
 			return transactionID !== tr.transactionID;
 		});
 
-		console.log(updatedTransactions);
+		// console.log(updatedTransactions);
 
 		if (usr !== undefined) {
 			setUsers([
@@ -88,6 +88,29 @@ const useActionTray = () => {
 		}
 	};
 
+	const editTransaction = (idx, transactionID, amount, purchaseInfoText) => {
+		const usr = findUser(users, idx);
+
+		if (usr !== undefined) {
+			setUsers([
+				...users.slice(0, idx - 1),
+				{
+					...usr,
+					transactions: [
+						...usr.transactions.slice(0, transactionID - 1),
+						{
+							transactionID,
+							amount,
+							purchaseInfo: `${purchaseInfoText}`,
+						},
+						...usr.transactions.slice(transactionID),
+					],
+				},
+				...users.slice(idx),
+			]);
+		}
+	};
+
 	return {
 		noOfUsers,
 		users,
@@ -95,6 +118,7 @@ const useActionTray = () => {
 		removeUser,
 		addTransaction,
 		removeTransaction,
+		editTransaction,
 	};
 };
 
@@ -108,6 +132,7 @@ const ActionTray = () => {
 		addTransaction,
 		removeUser,
 		removeTransaction,
+		editTransaction,
 	} = useActionTray();
 	const [showUserInput, toggleShowUserInput] = useState(false);
 	const [name, setName] = useState("");
@@ -183,12 +208,33 @@ const ActionTray = () => {
 										avg={Math.round(
 											totalExpense / noOfUsers
 										)}
+										editTransaction={(
+											transactionID,
+											amount,
+											purchaseInfo
+										) => {
+											editTransaction(
+												user.idx,
+												transactionID,
+												amount,
+												purchaseInfo
+											);
+											const previousAmount =
+												user.transactions[
+													transactionID - 1
+												].amount;
+											setTotalExpense(
+												totalExpense -
+													previousAmount +
+													amount
+											);
+										}}
 										updateTotalExpense={(amount) => {
 											setTotalExpense(
 												totalExpense + amount
 											);
 										}}
-										updateTransactions={(
+										addNewTransaction={(
 											amount,
 											purchaseInfo
 										) => {
@@ -198,7 +244,6 @@ const ActionTray = () => {
 												purchaseInfo
 											);
 										}}
-										transactions={user.transactions}
 										deleteTransaction={(
 											transactionID,
 											amount
@@ -211,6 +256,7 @@ const ActionTray = () => {
 												totalExpense - amount
 											);
 										}}
+										transactions={user.transactions}
 									/>
 								</div>
 							);
