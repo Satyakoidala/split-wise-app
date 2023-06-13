@@ -1,8 +1,10 @@
+@import "../../App.scss";
+
 .overlay {
 	z-index: 999;
 	position: fixed;
 	background-color: rgba(156, 252, 151, 0.6);
-	color: rgb(242, 242, 242);
+	color: $primary-text;
 	top: 0;
 	left: 0;
 	right: 0;
@@ -13,7 +15,7 @@
 	.overlay-content {
 		height: fit-content;
 		width: 50%;
-		background-color: rgb(4, 15, 22);
+		background-color: $primary-bg;
 		border-radius: 18px;
 		padding: 10px;
 	}
@@ -27,7 +29,7 @@
 		width: 60%;
 		fieldset {
 			border-radius: 12px;
-			border-color: rgb(41, 149, 57);
+			border-color: $primary-border;
 			box-shadow: 0 0 1.5px 1.5px rgba(41, 149, 57, 0.5);
 
 			&:has(input:focus) {
@@ -37,8 +39,8 @@
 		}
 
 		legend {
-			color: rgb(41, 149, 57);
-			background-color: rgb(4, 15, 22);
+			color: $primary-border;
+			background-color: $primary-bg;
 		}
 
 		input {
@@ -63,11 +65,11 @@
 
 		.btn-update,
 		.btn-confirm {
-			background-color: rgb(156, 252, 151);
+			background-color: $btn-success;
 		}
 
 		.btn-cancel {
-			background-color: rgb(213, 32, 47);
+			background-color: $btn-danger;
 		}
 	}
 }
