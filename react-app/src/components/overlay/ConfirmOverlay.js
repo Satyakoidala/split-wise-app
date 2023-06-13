@@ -1,7 +1,6 @@
 import React from "react";
 import reactDOM from "react-dom";
 
-import "./ConfirmOverlay.scss";
 import "./Overlay.scss";
 
 const UserDeleteConfirmOverlay = () => {};
