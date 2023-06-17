@@ -1,34 +1,30 @@
 $primary-bg: rgb(4, 15, 22);
-$secondary-bg: rgba(16, 30, 38, 0.6);
-$tertiary-bg: rgb(242, 242, 242, 0.5);
+$secondary-bg: rgba(16, 30, 38, 60%);
+$tertiary-bg: rgb(242, 242, 242, 50%);
 $primary-text: rgb(242, 242, 242);
 $tertiary-text: rgb(0, 0, 0);
 $btn-danger: rgb(213, 32, 47);
 $btn-success: rgb(156, 252, 151);
 $primary-border: rgb(41, 149, 57);
 $btn-edit: rgb(0, 130, 211);
-$overlay-bg-secondary: rgb(256, 256, 256, 0.25);
-$overlay-bg-primary: rgb(156, 252, 151, 0.6);
+$overlay-bg-secondary: rgb(256, 256, 256, 25%);
+$overlay-bg-primary: rgb(156, 252, 151, 60%);
 
 @keyframes border-input-anime {
 	25% {
 		border-right: 2px solid $primary-border;
-		// border-top: 2px solid $primary-border;
-		// border-left: 2px solid $primary-border;
 	}
+
 	50% {
 		border-top: 2px solid $primary-border;
-		// border-left: 2px solid $primary-border;
-		// border-bottom: 2px solid $primary-border;
 	}
+
 	75% {
 		border-left: 2px solid $primary-border;
-		// border-bottom: 2px solid $primary-border;
-		// border-right: 2px solid $primary-border;
 	}
+
 	100% {
 		border-bottom: 2px solid $primary-border;
-		// border-right: 2px solid $primary-border;
 	}
 }
 
@@ -67,8 +63,8 @@ input {
 	border-radius: 4px;
 	text-align: center;
 	background-color: transparent;
-	border: 2px solid rgb(242, 242, 242, 0.8);
-	box-shadow: 0 0 1.5px 1.5px rgb(242, 242, 242, 0.3);
+	border: 2px solid rgb(242, 242, 242, 80%);
+	box-shadow: 0 0 1.5px 1.5px rgb(242, 242, 242, 30%);
 	transition: border 2s ease;
 	color: $primary-text;
 	padding: 5px;

@@ -4,7 +4,7 @@ import cn from "classnames";
 import EditOverlay from "./overlay/EditOverlay";
 import ConfirmOverlay from "./overlay/ConfirmOverlay";
 
-import "./UserAction.scss";
+import "./UserActions.scss";
 
 export const TransactionsList = ({
 	transactions = [],

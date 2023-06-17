@@ -5,7 +5,7 @@
 	"private": true,
 	"scripts": {
 		"start": "npm run build && webpack serve",
-		"build": "webpack --mode development",
+		"build": "npm run lint && webpack --mode development",
 		"clean": "npm cache clean --force && rm -rf package-lock.json ./node_modules/ ./dist/",
 		"lint": "npm run lint:js && npm run lint:css",
 		"lint:js": "eslint src/**/*.js",

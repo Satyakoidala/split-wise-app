@@ -1,9 +1,9 @@
-@import "../../App.scss";
+@import "../../App";
 
 .overlay {
 	z-index: 999;
 	position: fixed;
-	background-color: rgba(156, 252, 151, 0.6);
+	background-color: rgba(156, 252, 151, 60%);
 	color: $primary-text;
 	top: 0;
 	left: 0;
@@ -27,10 +27,11 @@
 	.purchase-amount {
 		margin-block: 20px;
 		width: 60%;
+
 		fieldset {
 			border-radius: 12px;
 			border-color: $primary-border;
-			box-shadow: 0 0 1.5px 1.5px rgba(41, 149, 57, 0.5);
+			box-shadow: 0 0 1.5px 1.5px rgba(41, 149, 57, 50%);
 
 			&:has(input:focus) {
 				animation: border-input-anime 1s infinite ease-in-out

@@ -4,5 +4,8 @@ module.exports = {
 		indentation: "tab",
 		"at-rule-no-unknown": null,
 		"no-descending-specificity": null,
+		"color-function-notation": null,
+		"declaration-colon-newline-after": null,
+		"property-no-vendor-prefix": null,
 	},
 };
