@@ -6,6 +6,7 @@
 	"scripts": {
 		"start": "npm run build && webpack serve",
 		"build": "webpack --mode development",
+		"clean": "npm cache clean --force && rm -rf ./node_modules/ ./dist/",
 		"lint": "npm run lint:js && npm run lint:css",
 		"lint:js": "eslint src/**/*.js",
 		"lint:css": "stylelint src/**/*.scss",
