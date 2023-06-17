@@ -1,5 +1,5 @@
 import React from "react";
-import "./App.scss";
+import "./Common.scss";
 
 // import TransactionsInput from "./components/UserActions";
 import ActionTray from "./components/UserSection";

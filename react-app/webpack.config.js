@@ -35,11 +35,6 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.(js|jsx)$/, // kind of file extension this rule should look for and apply in test
-				exclude: /node_modules/, // folder to be excluded
-				use: "babel-loader", // loader which we are going to use
-			},
-			{
 				test: /\.scss$/i,
 				exclude: /node_modules/,
 				use: [
@@ -66,6 +61,11 @@ module.exports = {
 						},
 					},
 				],
+			},
+			{
+				test: /\.(js|jsx)$/, // kind of file extension this rule should look for and apply in test
+				exclude: /node_modules/, // folder to be excluded
+				use: "babel-loader", // loader which we are going to use
 			},
 			{
 				test: /\.(png|svg|jpg|jpeg|gif|webp)$/i,
