@@ -52,7 +52,7 @@
 		"path": "^0.12.7",
 		"prettier": "^2.8.1",
 		"sass": "^1.56.2",
-		"sass-loader": "^13.2.0",
+		"sass-loader": "^13.3.2",
 		"style-loader": "^3.3.1",
 		"stylelint": "^14.16.0",
 		"stylelint-config-standard": "^29.0.0",

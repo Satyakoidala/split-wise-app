@@ -25,6 +25,9 @@ module.exports = {
 		historyApiFallback: true,
 		liveReload: true,
 	},
+	stats: {
+		errorDetails: true,
+	},
 	resolve: {
 		extensions: [".js", ".jsx", ".json"],
 	},
