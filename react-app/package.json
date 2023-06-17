@@ -6,7 +6,7 @@
 	"scripts": {
 		"start": "npm run build && webpack serve",
 		"build": "webpack --mode development",
-		"clean": "npm cache clean --force && rm -rf ./node_modules/ ./dist/",
+		"clean": "npm cache clean --force && rm -rf package-lock.json ./node_modules/ ./dist/",
 		"lint": "npm run lint:js && npm run lint:css",
 		"lint:js": "eslint src/**/*.js",
 		"lint:css": "stylelint src/**/*.scss",
@@ -67,7 +67,6 @@
 		"react-dom": "^18.2.0"
 	},
 	"engines": {
-		"node": "v14.17.6",
-		"npm": "8.6.0"
+		"node": "v14.17.6"
 	}
 }
