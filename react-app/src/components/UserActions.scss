@@ -1,7 +1,11 @@
-@import "../Common";
+@import "../styles/Index";
 
 .user {
 	margin-bottom: 20px;
+
+	@include viewport(small) {
+		margin-bottom: 0;
+	}
 
 	.add-expense-btn {
 		background-color: $btn-success;
@@ -24,8 +28,24 @@
 }
 
 .price-summary {
-	.total-text {
-		padding: auto 0;
+	@include viewport(medium) {
+		flex-direction: column;
+	}
+
+	.total-price,
+	.settlement-price {
+		font-size: 18px;
+
+		@include viewport(medium) {
+			font-size: 20px;
+			margin-bottom: 20px;
+			align-items: end;
+		}
+
+		@include viewport(small) {
+			margin-bottom: 0;
+			margin-top: 10px;
+		}
 	}
 
 	.total-amount,
@@ -34,6 +54,11 @@
 		box-shadow: none;
 		border-bottom: 2px solid $primary-text;
 		margin-left: 15px;
+		font-size: 20px;
+
+		@include viewport(small) {
+			margin-left: 0;
+		}
 	}
 
 	.balance {
@@ -55,6 +80,10 @@
 	border-radius: 6px;
 	width: 80%;
 	margin-block: 20px;
+
+	@include viewport(small) {
+		width: 100%;
+	}
 
 	thead th {
 		background-color: $primary-border;

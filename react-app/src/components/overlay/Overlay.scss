@@ -1,4 +1,4 @@
-@import "../../Common";
+@import "../../styles/Index";
 
 .overlay {
 	z-index: 999;
@@ -12,12 +12,21 @@
 	box-sizing: border-box;
 	overflow: auto;
 
+	@include viewport(small) {
+		justify-content: center;
+	}
+
 	.overlay-content {
 		height: fit-content;
 		width: 50%;
 		background-color: $primary-bg;
 		border-radius: 18px;
 		padding: 10px;
+
+		@include viewport(small) {
+			margin-bottom: 0;
+			width: 85%;
+		}
 	}
 }
 
@@ -26,7 +35,11 @@
 	.purchase-info,
 	.purchase-amount {
 		margin-block: 20px;
-		width: 60%;
+		width: 80%;
+
+		@include viewport(small) {
+			width: 100%;
+		}
 
 		fieldset {
 			border-radius: 12px;
@@ -53,6 +66,10 @@
 			&:focus {
 				animation: none;
 			}
+
+			@include viewport(small) {
+				font-size: 24px;
+			}
 		}
 	}
 
@@ -60,8 +77,18 @@
 		margin-block: 20px;
 		width: 60%;
 
+		@include viewport(small) {
+			width: 90%;
+			flex-direction: row;
+			justify-content: space-evenly;
+		}
+
 		button {
 			font-size: 14px;
+
+			@include viewport(small) {
+				font-size: 20px;
+			}
 		}
 
 		.btn-update,

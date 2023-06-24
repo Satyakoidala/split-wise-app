@@ -208,7 +208,6 @@ const TransactionsInput = ({
 			<div className="user">
 				<h2 className="username">{username}</h2>
 				<div className="purchase-input d-flex">
-					{/* <div className="left"> */}
 					<input
 						ref={purchaseInfoRef}
 						type="text"
@@ -223,8 +222,6 @@ const TransactionsInput = ({
 							}
 						}}
 					/>
-					{/* </div> */}
-					{/* <div className="right"> */}
 					<input
 						ref={amountRef}
 						type="number"
@@ -238,7 +235,6 @@ const TransactionsInput = ({
 							if (ev.keyCode === 13) onSave(ev);
 						}}
 					/>
-					{/* </div> */}
 					<button
 						className="add-expense-btn"
 						type="button"

@@ -10,6 +10,7 @@
 		"lint": "npm run lint:js && npm run lint:css",
 		"lint:js": "eslint src/**/*.js",
 		"lint:css": "stylelint src/**/*.scss",
+		"clean-install": "npm run clean && npm i",
 		"test": "test"
 	},
 	"repository": {

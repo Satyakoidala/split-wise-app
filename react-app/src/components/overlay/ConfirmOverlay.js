@@ -15,7 +15,7 @@ const TransactionDeleteConfirmOverlay = ({
 	return (
 		<div className="transaction-delete-confirm-overlay overlay d-flex">
 			<div className="overlay-content">
-				<h3>Confirm Transaction to Delete?</h3>
+				<h2>Confirm Transaction to Delete?</h2>
 				<div className="purchase-info">
 					<fieldset>
 						<legend>Purchase Info</legend>

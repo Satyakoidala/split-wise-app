@@ -1,8 +1,13 @@
-@import "../Common";
+@import "../styles/Index";
 
 .split-wise-app {
 	width: 80%;
 	margin: 20px auto;
+
+	@include viewport(small) {
+		width: 95%;
+		margin: 20px auto;
+	}
 }
 
 .users-actions {
@@ -10,10 +15,19 @@
 	border-radius: 15px;
 	background-color: $secondary-bg;
 	padding: 25px;
+
+	@include viewport(small) {
+		padding: 10px;
+	}
 }
 
 .expenses-summary {
 	font-size: 24px;
+
+	@include viewport(small) {
+		font-size: 20px;
+		height: 80px;
+	}
 }
 
 .add-user-section {
@@ -23,6 +37,10 @@
 	button {
 		margin: 0;
 		width: 70px;
+
+		@include viewport(small) {
+			margin-bottom: 10px;
+		}
 	}
 
 	.save-btn {
@@ -38,6 +56,11 @@
 	font-size: 18px;
 	font-weight: 600;
 	margin-block: 30px;
+
+	@include viewport(small) {
+		margin-block-start: 5px;
+		margin-block-end: 20px;
+	}
 }
 
 .user-view {

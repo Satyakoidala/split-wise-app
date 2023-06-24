@@ -16,7 +16,7 @@ const TransactionEditOverlay = ({
 	return (
 		<div className="transaction-edit-overlay overlay d-flex">
 			<div className="overlay-content">
-				<h3>Edit Transaction</h3>
+				<h2>Edit Transaction</h2>
 				<div className="purchase-info">
 					<fieldset>
 						<legend>Purchase Info</legend>
