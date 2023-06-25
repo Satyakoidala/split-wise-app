@@ -7,5 +7,6 @@ module.exports = {
 		"color-function-notation": null,
 		"declaration-colon-newline-after": null,
 		"property-no-vendor-prefix": null,
+		"value-no-vendor-prefix": null,
 	},
 };

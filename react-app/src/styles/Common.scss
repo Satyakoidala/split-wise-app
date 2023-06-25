@@ -18,20 +18,21 @@
 	}
 }
 
-div {
-	margin: 0 auto;
-	text-align: center;
-}
-
 html,
 body {
 	margin: 0;
 	padding: 0;
 	width: 100%;
-	height: auto;
+	height: -webkit-fill-available;
 	font-family: Arial, Helvetica, sans-serif;
 	background-color: $primary-bg;
 	color: $primary-text;
+	overflow: hidden;
+}
+
+div {
+	margin: 0 auto;
+	text-align: center;
 }
 
 h1 {
@@ -48,6 +49,7 @@ li {
 #root {
 	width: 100%;
 	height: inherit;
+	overflow: auto;
 }
 
 input {

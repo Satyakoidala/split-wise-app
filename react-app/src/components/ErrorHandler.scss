@@ -1,0 +1,28 @@
+@import "../styles/Index";
+
+.error-message {
+	background-color: swatch("apple-white");
+	max-width: 300px;
+	border: 2px solid swatch("fire-red");
+	border-radius: 5px;
+	vertical-align: middle;
+	position: fixed;
+	bottom: 30px;
+	left: 20px;
+
+	@include viewport(small) {
+		bottom: 20px;
+		right: 0;
+		left: 0;
+	}
+
+	.show-error {
+		background-color: swatch("fire-red", 30%);
+		color: swatch("fire-red");
+		padding: 10px;
+	}
+
+	&:has(.no-error) {
+		display: none;
+	}
+}
