@@ -1,18 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
 import cn from "classnames";
+import _ from "lodash";
 import TransactionsInput from "./UserActions";
+import ErrorMessage from "./ErrorHandler";
+import util from "./Utils";
 
 import "./UserSection.scss";
 
-const findUser = (users, id) => {
-	return users.find((x) => {
-		return id === x.idx;
-	});
-};
-
 const useActionTray = () => {
-	const [noOfUsers, setNoOfUsers] = useState(0);
-	const [users, setUsers] = useState([]);
+	const [noOfUsers, setNoOfUsers] = useState(
+		JSON.parse(_.get(window.localStorage, "no_of_users") || "0")
+	);
+	const [users, setUsers] = useState(
+		JSON.parse(_.get(window.localStorage, "users") || "[]")
+	);
+
+	useEffect(() => {
+		_.set(window.localStorage, "no_of_users", JSON.stringify(noOfUsers));
+		_.set(window.localStorage, "users", JSON.stringify(users));
+	}, [noOfUsers, users]);
 
 	const addUser = (name) => {
 		setNoOfUsers(noOfUsers + 1);
@@ -28,7 +34,7 @@ const useActionTray = () => {
 
 	const removeUser = (idx) => {
 		setNoOfUsers(noOfUsers - 1);
-		const usr = findUser(users, idx);
+		const usr = util.findUser(users, idx);
 
 		if (usr === undefined) console.log("No User Found!");
 		else {
@@ -43,7 +49,7 @@ const useActionTray = () => {
 	};
 
 	const addTransaction = (idx, amount, purchaseInfoText) => {
-		const usr = findUser(users, idx);
+		const usr = util.findUser(users, idx);
 
 		if (usr !== undefined) {
 			setUsers([
@@ -68,7 +74,7 @@ const useActionTray = () => {
 	};
 
 	const removeTransaction = (idx, transactionID) => {
-		const usr = findUser(users, idx);
+		const usr = util.findUser(users, idx);
 
 		const updatedTransactions = usr.transactions.filter((tr) => {
 			return transactionID !== tr.transactionID;
@@ -89,7 +95,7 @@ const useActionTray = () => {
 	};
 
 	const editTransaction = (idx, transactionID, amount, purchaseInfoText) => {
-		const usr = findUser(users, idx);
+		const usr = util.findUser(users, idx);
 
 		if (usr !== undefined) {
 			setUsers([
@@ -137,10 +143,16 @@ const ActionTray = () => {
 	const [showUserInput, toggleShowUserInput] = useState(false);
 	const [name, setName] = useState("");
 	const nameRef = useRef();
+	const [hasError, toggleHasError] = useState(false);
+	const errorText = useRef("");
 
 	useEffect(() => {
-		console.log(users);
-	}, [users]);
+		const currTotal = users
+			.map((x) => x.transactions)
+			.flat()
+			.reduce((sum, x) => sum + x.amount, 0);
+		setTotalExpense(currTotal);
+	}, []);
 
 	const onDeleteUser = (id) => {
 		const removedUser = removeUser(id);
@@ -161,15 +173,22 @@ const ActionTray = () => {
 	const onSave = (ev) => {
 		ev.stopPropagation();
 
-		addUser(name);
-		toggleShowUserInput(false);
+		if (name === "") {
+			errorText.current = util.getErrorMessage("EMPTY_USERNAME");
+			toggleHasError(true);
+		} else if (users.find((x) => x.name === name)) {
+			errorText.current = util.getErrorMessage("NOT_UNIQUE_USERNAME");
+			toggleHasError(true);
+		} else {
+			addUser(name);
+			toggleShowUserInput(false);
+			setName("");
+		}
 	};
 
 	const onCancel = (ev) => {
 		ev.stopPropagation();
 
-		// const elm = nameRef.current;
-		// if (elm) elm.target.value = "";
 		setName("");
 		toggleShowUserInput(false);
 	};
@@ -332,6 +351,21 @@ const ActionTray = () => {
 					</div>
 				)}
 			</div>
+			<ErrorMessage
+				id="username-input-errors"
+				errorText={errorText.current}
+				showError={hasError}
+				onErrorShown={() => {
+					errorText.current = "";
+					if (nameRef.current) {
+						nameRef.current.value = "";
+						nameRef.current.focus();
+					}
+					toggleHasError(false);
+					setName("");
+				}}
+				onErrorClosed={() => {}}
+			/>
 		</div>
 	);
 };

@@ -55,7 +55,8 @@
 .suggestions {
 	font-size: 18px;
 	font-weight: 600;
-	margin-block: 30px;
+	margin-block-start: 10px;
+	margin-block-end: 30px;
 
 	@include viewport(small) {
 		margin-block-start: 5px;

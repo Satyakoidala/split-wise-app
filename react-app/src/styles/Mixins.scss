@@ -9,3 +9,19 @@
 		}
 	}
 }
+
+@function swatch($color, $opacity: 1) {
+	@if $color == "fire-red" {
+		@return rgb(213, 32, 47, $opacity);
+	} @else if $color == "rich-black" {
+		@return rgb(4, 15, 22, $opacity);
+	} @else if $color == "steel-blue" {
+		@return rgb(0, 130, 211, $opacity);
+	} @else if $color == "forest-green" {
+		@return rgb(41, 149, 57, $opacity);
+	} @else if $color == "light-green" {
+		@return rgb(156, 252, 151, $opacity);
+	} @else if $color == "apple-white" {
+		@return rgb(242, 242, 242, $opacity);
+	}
+}

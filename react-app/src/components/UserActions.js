@@ -1,8 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import cn from "classnames";
-
 import EditOverlay from "./overlay/EditOverlay";
 import ConfirmOverlay from "./overlay/ConfirmOverlay";
+import ErrorMessage from "./ErrorHandler";
+import util from "./Utils";
 
 import "./UserActions.scss";
 
@@ -175,6 +176,13 @@ const TransactionsInput = ({
 	const [amount, setAmount] = useState(0);
 	const [purchaseInfo, updatePurchaseInfo] = useState("");
 	const [total, setTotal] = useState(0);
+	const [hasError, toggleHasError] = useState(false);
+	const errorText = useRef("");
+
+	useEffect(() => {
+		const currTotal = transactions.reduce((sum, x) => sum + x.amount, 0);
+		setTotal(currTotal);
+	}, []);
 
 	const handleAmountInput = (ev) => {
 		ev.stopPropagation();
@@ -194,13 +202,18 @@ const TransactionsInput = ({
 	const onSave = (ev) => {
 		ev.stopPropagation();
 
-		setTotal(amount + total);
-		updateTotalExpense(amount);
-		addNewTransaction(amount, purchaseInfo);
-		setAmount(0);
-		updatePurchaseInfo("");
-		amountRef.current.value = "";
-		purchaseInfoRef.current.value = "";
+		if (purchaseInfo === "") {
+			errorText.current = util.getErrorMessage("EMPTY_PURCHASE_INFO");
+			toggleHasError(true);
+		} else {
+			setTotal(amount + total);
+			updateTotalExpense(amount);
+			addNewTransaction(amount, purchaseInfo);
+			setAmount(0);
+			updatePurchaseInfo("");
+			amountRef.current.value = "";
+			purchaseInfoRef.current.value = "";
+		}
 	};
 
 	return (
@@ -286,6 +299,16 @@ const TransactionsInput = ({
 					editTransaction(transID, newAmount, newInfo);
 					setTotal(total - oldAmount + newAmount);
 				}}
+			/>
+			<ErrorMessage
+				id="transactions-input-errors"
+				errorText={errorText.current}
+				showError={hasError}
+				onErrorShown={() => {
+					errorText.current = "";
+					toggleHasError(false);
+				}}
+				onErrorClosed={() => {}}
 			/>
 		</>
 	);

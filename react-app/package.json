@@ -1,6 +1,6 @@
 {
 	"name": "split-wise-react-app",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"description": "Web Application based on react for splitwise app.",
 	"private": true,
 	"scripts": {
@@ -50,6 +50,7 @@
 		"eslint-plugin-react": "^7.31.11",
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"html-webpack-plugin": "^5.5.0",
+		"lodash": "^4.17.21",
 		"mini-css-extract-plugin": "^2.7.2",
 		"path": "^0.12.7",
 		"prettier": "^2.8.1",
