@@ -1,23 +1,32 @@
 import React, { useEffect, useRef, useState } from "react";
 import cn from "classnames";
+import { v4 as uuidv4 } from "uuid";
 import _ from "lodash";
 import TransactionsInput from "./UserActions";
-import ErrorMessage from "./ErrorHandler";
-import util from "./Utils";
+import ErrorMessage from "../error-handler/ErrorHandler";
+import util from "../Utils";
 
 import "./UserSection.scss";
+import ConfirmOverlay from "../overlay/ConfirmOverlay";
 
-const useActionTray = () => {
+const useActionTray = (id) => {
+	const NO_OF_USERS_LS_NAME = `${id}_no_of_users`;
+	const USERS_LS_NAME = `${id}_users`;
+
 	const [noOfUsers, setNoOfUsers] = useState(
-		JSON.parse(_.get(window.localStorage, "no_of_users") || "0")
+		JSON.parse(_.get(window.localStorage, NO_OF_USERS_LS_NAME) || "0")
 	);
 	const [users, setUsers] = useState(
-		JSON.parse(_.get(window.localStorage, "users") || "[]")
+		JSON.parse(_.get(window.localStorage, USERS_LS_NAME) || "[]")
 	);
 
 	useEffect(() => {
-		_.set(window.localStorage, "no_of_users", JSON.stringify(noOfUsers));
-		_.set(window.localStorage, "users", JSON.stringify(users));
+		_.set(
+			window.localStorage,
+			NO_OF_USERS_LS_NAME,
+			JSON.stringify(noOfUsers)
+		);
+		_.set(window.localStorage, USERS_LS_NAME, JSON.stringify(users));
 	}, [noOfUsers, users]);
 
 	const addUser = (name) => {
@@ -25,8 +34,8 @@ const useActionTray = () => {
 		setUsers([
 			...users,
 			{
-				idx: noOfUsers + 1,
-				name: `${name}`,
+				idx: uuidv4(),
+				name: `${name.toUpperCase()}`,
 				transactions: [],
 			},
 		]);
@@ -50,31 +59,30 @@ const useActionTray = () => {
 
 	const addTransaction = (idx, amount, purchaseInfoText) => {
 		const usr = util.findUser(users, idx);
+		const index = users.indexOf(usr);
 
 		if (usr !== undefined) {
 			setUsers([
-				// ...users.filter((x) => {
-				// 	return idx !== x.idx;
-				// }),
-				...users.slice(0, idx - 1),
+				...users.slice(0, index),
 				{
 					...usr,
 					transactions: [
 						...usr.transactions,
 						{
-							transactionID: usr.transactions.length + 1,
+							transactionID: uuidv4(),
 							amount,
 							purchaseInfo: `${purchaseInfoText}`,
 						},
 					],
 				},
-				...users.slice(idx),
+				...users.slice(index + 1),
 			]);
 		}
 	};
 
 	const removeTransaction = (idx, transactionID) => {
 		const usr = util.findUser(users, idx);
+		const index = users.indexOf(usr);
 
 		const updatedTransactions = usr.transactions.filter((tr) => {
 			return transactionID !== tr.transactionID;
@@ -84,35 +92,41 @@ const useActionTray = () => {
 
 		if (usr !== undefined) {
 			setUsers([
-				...users.slice(0, idx - 1),
+				...users.slice(0, index),
 				{
 					...usr,
 					transactions: updatedTransactions,
 				},
-				...users.slice(idx),
+				...users.slice(index + 1),
 			]);
 		}
 	};
 
 	const editTransaction = (idx, transactionID, amount, purchaseInfoText) => {
 		const usr = util.findUser(users, idx);
+		const index = users.indexOf(usr);
+
+		const transaction = usr.transactions.find((x) => {
+			return transactionID === x.transactionID;
+		});
+		const transID = usr.transactions.indexOf(transaction);
 
 		if (usr !== undefined) {
 			setUsers([
-				...users.slice(0, idx - 1),
+				...users.slice(0, index),
 				{
 					...usr,
 					transactions: [
-						...usr.transactions.slice(0, transactionID - 1),
+						...usr.transactions.slice(0, transID),
 						{
 							transactionID,
 							amount,
 							purchaseInfo: `${purchaseInfoText}`,
 						},
-						...usr.transactions.slice(transactionID),
+						...usr.transactions.slice(transID + 1),
 					],
 				},
-				...users.slice(idx),
+				...users.slice(index + 1),
 			]);
 		}
 	};
@@ -128,7 +142,7 @@ const useActionTray = () => {
 	};
 };
 
-const ActionTray = () => {
+const SheetActionTray = ({ title, sheetId = "sheet-x" }) => {
 	const userSectionRef = useRef();
 	const [totalExpense, setTotalExpense] = useState(0);
 	const {
@@ -139,11 +153,12 @@ const ActionTray = () => {
 		removeUser,
 		removeTransaction,
 		editTransaction,
-	} = useActionTray();
+	} = useActionTray(sheetId);
 	const [showUserInput, toggleShowUserInput] = useState(false);
 	const [name, setName] = useState("");
 	const nameRef = useRef();
 	const [hasError, toggleHasError] = useState(false);
+	const [toBeDeletedUser, setToBeDeletedUser] = useState(null);
 	const errorText = useRef("");
 
 	useEffect(() => {
@@ -176,7 +191,7 @@ const ActionTray = () => {
 		if (name === "") {
 			errorText.current = util.getErrorMessage("EMPTY_USERNAME");
 			toggleHasError(true);
-		} else if (users.find((x) => x.name === name)) {
+		} else if (users.find((x) => x.name === name.toUpperCase())) {
 			errorText.current = util.getErrorMessage("NOT_UNIQUE_USERNAME");
 			toggleHasError(true);
 		} else {
@@ -194,9 +209,21 @@ const ActionTray = () => {
 	};
 
 	return (
-		<div className="split-wise-app">
+		<div className="action-tray">
+			{title && <h2 className="sheet-header">{title}</h2>}
+			<div className="expenses-summary column-50">
+				<div className="total-expense left">
+					Total Expenses: Rs.{totalExpense}
+				</div>
+				{noOfUsers > 0 && (
+					<div className="avg-expense right">
+						Average Expenses per head: Rs.
+						{Math.round(totalExpense / noOfUsers)}
+					</div>
+				)}
+			</div>
 			<div className="users-actions">
-				{noOfUsers > 0 ? (
+				{noOfUsers > 0 && (
 					<div
 						className="users block"
 						id="users"
@@ -216,7 +243,7 @@ const ActionTray = () => {
 										className="delete-usr"
 										onClick={(ev) => {
 											ev.stopPropagation();
-											onDeleteUser(user.idx);
+											setToBeDeletedUser(user.idx);
 										}}
 									>
 										X
@@ -239,9 +266,11 @@ const ActionTray = () => {
 												purchaseInfo
 											);
 											const previousAmount =
-												user.transactions[
-													transactionID - 1
-												].amount;
+												user.transactions.find(
+													(x) =>
+														x.transactionID ===
+														transactionID
+												).amount;
 											setTotalExpense(
 												totalExpense -
 													previousAmount +
@@ -277,25 +306,58 @@ const ActionTray = () => {
 										}}
 										transactions={user.transactions}
 									/>
+									{toBeDeletedUser &&
+										toBeDeletedUser === user.idx && (
+											<ConfirmOverlay
+												template="USER_DELETE"
+												username={user.name}
+												onClickedYes={() => {
+													onDeleteUser(user.idx);
+													if (toBeDeletedUser)
+														setToBeDeletedUser(
+															null
+														);
+												}}
+												onClickedNo={() => {
+													setToBeDeletedUser(null);
+												}}
+											/>
+										)}
 								</div>
 							);
 						})}
 					</div>
-				) : !showUserInput ? (
+				)}
+				{!showUserInput ? (
 					<div className="intro suggestions">
-						Add your buddy, and note their expenses. <br />
+						{/* Add your buddy, and note their expenses. <br />
 						<br />
 						Remember, you can split the bills but not the
-						friendship.
+							friendship. */}
+						{noOfUsers > 0 ? (
+							<>Tag your buddy now!!</>
+						) : (
+							<>
+								Tag yourself first and later you can add your
+								buddies.
+							</>
+						)}
 					</div>
 				) : (
 					<div className="user-encouragement suggestions">
-						Yes! You are on track!! Thats it! Add your buddy!
+						{noOfUsers > 0 ? (
+							<>
+								Yes! Thats it!! You are right on the money!
+								<br />
+								Add your buddy now!!
+							</>
+						) : (
+							<>Input your name and stay back to see the magic!</>
+						)}
 					</div>
 				)}
 				{showUserInput && (
 					<div className="add-user-section d-flex">
-						{/* <div className=""> */}
 						<input
 							ref={nameRef}
 							type="text"
@@ -305,8 +367,6 @@ const ActionTray = () => {
 								setName(e.target.value);
 							}}
 						/>
-						{/* </div> */}
-						{/* <div className="user-action-buttons"> */}
 						<button
 							className="save-btn"
 							type="button"
@@ -325,7 +385,6 @@ const ActionTray = () => {
 						>
 							Cancel
 						</button>
-						{/* </div> */}
 					</div>
 				)}
 				{!showUserInput && (
@@ -336,19 +395,35 @@ const ActionTray = () => {
 							onAddUser(ev);
 						}}
 					>
-						Add Your Buddy
+						{noOfUsers > 0 ? (
+							<span>
+								Add Your Buddy&nbsp;
+								<svg
+									viewBox="0 0 24 24"
+									width="14"
+									height="14"
+									stroke="currentColor"
+									strokeWidth="3"
+									fill="none"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									className="css-i6dzq1"
+								>
+									<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+									<circle cx="8.5" cy="7" r="4"></circle>
+									<line x1="20" y1="8" x2="20" y2="14"></line>
+									<line
+										x1="23"
+										y1="11"
+										x2="17"
+										y2="11"
+									></line>
+								</svg>
+							</span>
+						) : (
+							"Tag yourself"
+						)}
 					</button>
-				)}
-			</div>
-			<div className="expenses-summary column-50">
-				<div className="total-expense left">
-					Total Expenses: Rs.{totalExpense}
-				</div>
-				{noOfUsers > 0 && (
-					<div className="avg-expense right">
-						Average Expenses per head: Rs.
-						{Math.round(totalExpense / noOfUsers)}
-					</div>
 				)}
 			</div>
 			<ErrorMessage
@@ -370,4 +445,4 @@ const ActionTray = () => {
 	);
 };
 
-export default ActionTray;
+export default SheetActionTray;

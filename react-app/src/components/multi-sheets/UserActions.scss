@@ -1,8 +1,6 @@
-@import "../styles/Index";
+@import "../../styles/Index";
 
 .user {
-	margin-bottom: 20px;
-
 	@include viewport(small) {
 		margin-bottom: 0;
 	}
@@ -28,19 +26,13 @@
 }
 
 .price-summary {
-	@include viewport(medium) {
-		flex-direction: column;
-	}
+	flex-direction: column;
 
 	.total-price,
 	.settlement-price {
-		font-size: 18px;
-
-		@include viewport(medium) {
-			font-size: 20px;
-			margin-bottom: 20px;
-			align-items: end;
-		}
+		font-size: 20px;
+		margin-bottom: 20px;
+		align-items: end;
 
 		@include viewport(small) {
 			margin-bottom: 0;

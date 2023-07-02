@@ -30,6 +30,26 @@ body {
 	overflow: hidden;
 }
 
+::-webkit-scrollbar {
+	width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	border-radius: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track-piece {
+	background: $secondary-bg;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: swatch("apple-white", 50%);
+	border-radius: 10px;
+}
+
 div {
 	margin: 0 auto;
 	text-align: center;
@@ -50,6 +70,7 @@ li {
 	width: 100%;
 	height: inherit;
 	overflow: auto;
+	position: relative;
 }
 
 input {
@@ -138,4 +159,44 @@ button {
 
 svg {
 	pointer-events: none;
+}
+
+fieldset {
+	border-radius: 12px;
+	border-color: $primary-border;
+	box-shadow: 0 0 1.5px 1.5px rgba(41, 149, 57, 50%);
+
+	&:has(input:focus) {
+		animation: border-input-anime 1s infinite ease-in-out alternate-reverse;
+	}
+
+	legend {
+		color: $primary-border;
+		background-color: $primary-bg;
+	}
+
+	input {
+		border: none;
+		box-shadow: none;
+		transition: none;
+		font-size: 18px;
+
+		&:focus {
+			animation: none;
+		}
+
+		@include viewport(small) {
+			font-size: 24px;
+		}
+	}
+}
+
+/* App.js related styles */
+.welcome-title {
+	font-size: 50px;
+	font-weight: 400;
+
+	@include viewport(small) {
+		font-size: 36px;
+	}
 }

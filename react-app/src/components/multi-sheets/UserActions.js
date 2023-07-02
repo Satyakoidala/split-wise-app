@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import cn from "classnames";
-import EditOverlay from "./overlay/EditOverlay";
-import ConfirmOverlay from "./overlay/ConfirmOverlay";
-import ErrorMessage from "./ErrorHandler";
-import util from "./Utils";
+import EditOverlay from "../overlay/EditOverlay";
+import ConfirmOverlay from "../overlay/ConfirmOverlay";
+import ErrorMessage from "../error-handler/ErrorHandler";
+import util from "../Utils";
 
 import "./UserActions.scss";
 
@@ -186,7 +186,7 @@ const TransactionsInput = ({
 
 	const handleAmountInput = (ev) => {
 		ev.stopPropagation();
-		const inputAmount = Number.parseInt(ev.target.value, 10);
+		const inputAmount = Number.parseInt(ev.target.value || "0", 10);
 
 		// console.log(inputAmount);
 		setAmount(inputAmount);

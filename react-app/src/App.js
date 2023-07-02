@@ -1,14 +1,12 @@
 import React from "react";
 import "./styles/Common.scss";
-
-// import TransactionsInput from "./components/UserActions";
-import ActionTray from "./components/UserSection";
+import SplitWise from "./components/Splitwise";
 
 const App = () => {
 	return (
 		<>
-			<h1>Welcome to SplitWise App</h1>
-			<ActionTray />
+			<h1 className="welcome-title">Welcome to SplitWise App</h1>
+			<SplitWise />
 		</>
 	);
 };

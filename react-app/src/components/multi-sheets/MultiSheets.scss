@@ -1,0 +1,85 @@
+@import "../../styles/Index";
+
+.accordion {
+	margin-bottom: 15px;
+
+	.accordion-content {
+		width: 80%;
+		background-color: $secondary-bg;
+		border-radius: 10px;
+
+		@include viewport(medium) {
+			width: 95%;
+		}
+
+		@include viewport(small) {
+			width: 95%;
+		}
+	}
+
+	.accordion-btn-text {
+		height: 48px;
+		display: inherit;
+		align-items: center;
+
+		@include viewport(medium) {
+			height: 40px;
+		}
+
+		@include viewport(small) {
+			height: 32px;
+		}
+	}
+
+	.accordion-icon {
+		width: 48px;
+		height: 48px;
+
+		@include viewport(medium) {
+			width: 40px;
+			height: 40px;
+		}
+
+		@include viewport(small) {
+			width: 32px;
+			height: 32px;
+		}
+
+		svg {
+			@include viewport(medium) {
+				width: 40px;
+				height: 40px;
+			}
+
+			@include viewport(small) {
+				width: 32px;
+				height: 32px;
+			}
+		}
+	}
+
+	.accordion-btn {
+		width: 100%;
+		font-size: 40px;
+		background-color: swatch("forest-green");
+		color: swatch("rich-black");
+		padding: 10px 20px;
+		display: flex;
+		justify-content: space-between;
+		margin: 0 auto;
+
+		@include viewport(medium) {
+			font-size: 32px;
+			padding: 10px;
+		}
+
+		@include viewport(small) {
+			font-size: 24px;
+			padding: 10px;
+		}
+
+		.accordion-btn-text {
+			font-weight: 500;
+		}
+	}
+}
