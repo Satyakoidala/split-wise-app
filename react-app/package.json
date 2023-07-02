@@ -1,6 +1,6 @@
 {
 	"name": "split-wise-react-app",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Web Application based on react for splitwise app.",
 	"private": true,
 	"scripts": {
