@@ -3,7 +3,38 @@ import reactDOM from "react-dom";
 
 import "./Overlay.scss";
 
-const UserDeleteConfirmOverlay = () => {};
+const UserDeleteConfirmOverlay = ({
+	username,
+	onClickedYes = (f) => f,
+	onClickedNo = (f) => f,
+}) => {
+	return (
+		<div className="user-delete-confirm-overlay overlay d-flex">
+			<div className="overlay-content">
+				<h2>
+					Confirm to delete user - {username} and all of their
+					transactions?
+				</h2>
+				<div className="actions d-flex">
+					<button
+						type="button"
+						className="btn-confirm"
+						onClick={onClickedYes}
+					>
+						Yes
+					</button>
+					<button
+						type="button"
+						className="btn-cancel"
+						onClick={onClickedNo}
+					>
+						No
+					</button>
+				</div>
+			</div>
+		</div>
+	);
+};
 
 const TransactionDeleteConfirmOverlay = ({
 	transactionID,

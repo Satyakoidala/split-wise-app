@@ -1,6 +1,6 @@
 {
 	"name": "split-wise-react-app",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Web Application based on react for splitwise app.",
 	"private": true,
 	"scripts": {
@@ -60,6 +60,7 @@
 		"stylelint": "^14.16.0",
 		"stylelint-config-standard": "^29.0.0",
 		"stylelint-config-standard-scss": "^6.1.0",
+		"uuidv4": "^6.2.13",
 		"webpack": "^5.75.0",
 		"webpack-cli": "^5.0.0",
 		"webpack-dev-server": "^4.11.1"

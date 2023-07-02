@@ -1,0 +1,173 @@
+@import "../styles/Index";
+
+.main-welcome-intro {
+	font-size: 24px;
+	padding: 10px;
+	line-height: 1.2;
+
+	@include viewport(small) {
+		font-size: 16px;
+	}
+
+	.app-name,
+	b {
+		font-size: 48px;
+		font-weight: 500;
+		color: swatch("forest-green");
+
+		@include viewport(small) {
+			font-size: 24px;
+		}
+	}
+}
+
+.split-wise-app {
+	margin-block: 8rem;
+	width: 95%;
+	position: inherit;
+
+	@include viewport(medium) {
+		margin-block: 6rem;
+	}
+
+	.docs-on-get-started {
+		font-size: 28px;
+
+		@include viewport(medium) {
+			font-size: 24px;
+		}
+
+		@include viewport(small) {
+			font-size: 20px;
+		}
+	}
+
+	.app-intro {
+		padding: 5rem 4rem;
+		background-color: $secondary-bg;
+		display: flex;
+		justify-content: space-evenly;
+		align-items: center;
+		border-radius: 15px;
+
+		@include viewport(medium) {
+			padding: 2rem 0;
+		}
+
+		@include viewport(small) {
+			padding: 2rem;
+			flex-direction: column;
+			row-gap: 20px;
+		}
+
+		.left {
+			width: 70%;
+
+			@include viewport(small) {
+				width: 100%;
+			}
+		}
+
+		.right {
+			width: 30%;
+
+			@include viewport(small) {
+				width: 100%;
+			}
+		}
+
+		.get-started-btn {
+			background-color: swatch("forest-green");
+			font-size: 16px;
+			padding: 10px;
+
+			@include viewport(small) {
+				padding: 5px;
+			}
+
+			&:hover {
+				background-color: swatch("light-green");
+			}
+		}
+	}
+
+	.add-sheet-btn,
+	.cancel-add-sheet-btn {
+		width: 40px;
+		height: 40px;
+		padding: 0;
+		color: swatch("fire-red");
+		border-radius: 50%;
+		position: relative;
+
+		svg {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			margin: auto;
+
+			@include viewport(small) {
+				width: 24px;
+				height: 24px;
+			}
+		}
+
+		@include viewport(small) {
+			width: 32px;
+			height: 32px;
+		}
+	}
+
+	.input-sheet {
+		width: 80%;
+		padding: 15px;
+
+		@include viewport(medium) {
+			width: 90%;
+		}
+
+		@include viewport(small) {
+			width: 90%;
+		}
+
+		fieldset {
+			width: 30%;
+			transition: width 1s ease-in-out;
+			padding: 5px;
+			margin-bottom: 10px;
+
+			legend {
+				font-size: 18px;
+
+				@include viewport(small) {
+					font-size: 12px;
+				}
+			}
+
+			@include viewport(small) {
+				padding: 0;
+				font-size: 12px;
+			}
+
+			&:has(.sheet-name-input:focus) {
+				width: 100%;
+			}
+		}
+	}
+
+	.sheet-name-input {
+		font-weight: 500;
+		font-size: 20px;
+
+		&:focus::placeholder {
+			color: transparent;
+		}
+
+		@include viewport(small) {
+			padding: 0;
+			font-size: 16px;
+		}
+	}
+}

@@ -28,50 +28,6 @@
 			width: 85%;
 		}
 	}
-}
-
-.transaction-edit-overlay,
-.transaction-delete-confirm-overlay {
-	.purchase-info,
-	.purchase-amount {
-		margin-block: 20px;
-		width: 80%;
-
-		@include viewport(small) {
-			width: 100%;
-		}
-
-		fieldset {
-			border-radius: 12px;
-			border-color: $primary-border;
-			box-shadow: 0 0 1.5px 1.5px rgba(41, 149, 57, 50%);
-
-			&:has(input:focus) {
-				animation: border-input-anime 1s infinite ease-in-out
-					alternate-reverse;
-			}
-		}
-
-		legend {
-			color: $primary-border;
-			background-color: $primary-bg;
-		}
-
-		input {
-			border: none;
-			box-shadow: none;
-			transition: none;
-			font-size: 18px;
-
-			&:focus {
-				animation: none;
-			}
-
-			@include viewport(small) {
-				font-size: 24px;
-			}
-		}
-	}
 
 	.actions {
 		margin-block: 20px;
@@ -98,6 +54,19 @@
 
 		.btn-cancel {
 			background-color: $btn-danger;
+		}
+	}
+}
+
+.transaction-edit-overlay,
+.transaction-delete-confirm-overlay {
+	.purchase-info,
+	.purchase-amount {
+		margin-block: 20px;
+		width: 80%;
+
+		@include viewport(small) {
+			width: 100%;
 		}
 	}
 }
