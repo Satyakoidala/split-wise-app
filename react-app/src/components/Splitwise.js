@@ -21,7 +21,11 @@ const Intro = () => {
 	);
 };
 
-const SheetNameInput = ({ onSave = (f) => f }) => {
+const SheetNameInput = ({
+	onSave = (f) => f,
+	onCancel = (f) => f,
+	isMobileView = false,
+}) => {
 	const [name, setName] = React.useState("");
 	const inputRef = React.useRef(null);
 
@@ -49,6 +53,53 @@ const SheetNameInput = ({ onSave = (f) => f }) => {
 					}}
 				/>
 			</fieldset>
+			{isMobileView && name.trim() !== "" && (
+				<div className="input-sheet-actions">
+					<button
+						type="button"
+						className="add-sheet-btn"
+						onClick={() => {
+							onSave(name);
+						}}
+					>
+						<svg
+							viewBox="0 0 24 24"
+							width="32"
+							height="32"
+							stroke="currentColor"
+							strokeWidth="2"
+							fill="none"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							className="css-i6dzq1"
+						>
+							<polyline points="20 6 9 17 4 12"></polyline>
+						</svg>
+					</button>
+					<button
+						type="button"
+						className="cancel-add-sheet-btn"
+						onClick={() => {
+							onCancel();
+						}}
+					>
+						<svg
+							viewBox="0 0 24 24"
+							width="32"
+							height="32"
+							stroke="currentColor"
+							strokeWidth="2"
+							fill="none"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							className="css-i6dzq1"
+						>
+							<line x1="18" y1="6" x2="6" y2="18"></line>
+							<line x1="6" y1="6" x2="18" y2="18"></line>
+						</svg>
+					</button>
+				</div>
+			)}
 		</div>
 	);
 };
@@ -61,6 +112,7 @@ const SplitWise = () => {
 		JSON.parse(_.get(window.localStorage, "sheets", "[]")) || []
 	);
 	const [addSheet, setAddSheet] = React.useState(false);
+	const isMobileView = window.screen.width < 768;
 
 	React.useEffect(() => {
 		const onLoadSheets =
@@ -110,11 +162,17 @@ const SplitWise = () => {
 						Lets create your first SplitWise expense sheet. Name the
 						memory that reminds you the bills.
 					</div>
-					<SheetNameInput onSave={onSave} onCancel={onCancel} />
+					<SheetNameInput
+						onSave={onSave}
+						onCancel={() => {
+							toggleGetStarted(false);
+						}}
+						isMobileView={isMobileView}
+					/>
 				</>
 			) : (
 				<>
-					<MultiSheets sheets={sheets} />
+					<MultiSheets sheets={sheets} isMobileView={isMobileView} />
 					{sheets.length < MAX_SHEETS + 1 && (
 						<div className="add-sheet-form">
 							{!addSheet ? (
@@ -185,6 +243,7 @@ const SplitWise = () => {
 									<SheetNameInput
 										onSave={onSave}
 										onCancel={onCancel}
+										isMobileView={isMobileView}
 									/>
 								</>
 							)}

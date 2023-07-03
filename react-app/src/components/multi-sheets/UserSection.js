@@ -142,7 +142,11 @@ const useActionTray = (id) => {
 	};
 };
 
-const SheetActionTray = ({ title, sheetId = "sheet-x" }) => {
+const SheetActionTray = ({
+	title,
+	sheetId = "sheet-x",
+	isMobileView = false,
+}) => {
 	const userSectionRef = useRef();
 	const [totalExpense, setTotalExpense] = useState(0);
 	const {
@@ -207,6 +211,29 @@ const SheetActionTray = ({ title, sheetId = "sheet-x" }) => {
 		setName("");
 		toggleShowUserInput(false);
 	};
+
+	const addUserActionsMarkup = (
+		<>
+			<button
+				className="save-btn"
+				type="button"
+				onClick={(ev) => {
+					onSave(ev);
+				}}
+			>
+				Save
+			</button>
+			<button
+				className="cancel-btn"
+				type="button"
+				onClick={(ev) => {
+					onCancel(ev);
+				}}
+			>
+				Cancel
+			</button>
+		</>
+	);
 
 	return (
 		<div className="action-tray">
@@ -367,24 +394,12 @@ const SheetActionTray = ({ title, sheetId = "sheet-x" }) => {
 								setName(e.target.value);
 							}}
 						/>
-						<button
-							className="save-btn"
-							type="button"
-							onClick={(ev) => {
-								onSave(ev);
-							}}
-						>
-							Save
-						</button>
-						<button
-							className="cancel-btn"
-							type="button"
-							onClick={(ev) => {
-								onCancel(ev);
-							}}
-						>
-							Cancel
-						</button>
+						{!isMobileView && addUserActionsMarkup}
+						{isMobileView && (
+							<div className="add-user-actions">
+								{addUserActionsMarkup}
+							</div>
+						)}
 					</div>
 				)}
 				{!showUserInput && (

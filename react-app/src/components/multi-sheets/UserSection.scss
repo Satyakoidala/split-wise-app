@@ -48,6 +48,14 @@
 	.cancel-btn {
 		background-color: $btn-danger;
 	}
+
+	.add-user-actions {
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		width: 95%;
+		margin-top: 20px;
+	}
 }
 
 .suggestions {

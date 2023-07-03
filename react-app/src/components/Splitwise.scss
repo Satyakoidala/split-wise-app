@@ -91,12 +91,19 @@
 		}
 	}
 
+	.add-sheet-btn {
+		color: swatch("forest-green");
+	}
+
+	.cancel-add-sheet-btn {
+		color: swatch("fire-red");
+	}
+
 	.add-sheet-btn,
 	.cancel-add-sheet-btn {
 		width: 40px;
 		height: 40px;
 		padding: 0;
-		color: swatch("fire-red");
 		border-radius: 50%;
 		position: relative;
 
@@ -169,5 +176,12 @@
 			padding: 0;
 			font-size: 16px;
 		}
+	}
+
+	.input-sheet-actions {
+		display: flex;
+		justify-content: space-around;
+		width: 95%;
+		margin-top: 20px;
 	}
 }

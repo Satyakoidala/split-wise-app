@@ -4,7 +4,7 @@ import SheetActionTray from "./UserSection";
 
 import "./MultiSheets.scss";
 
-const Sheet = ({ index, sheetName = "Sheet" }) => {
+const Sheet = ({ index, sheetName = "Sheet", ...rest }) => {
 	const [showSheet, toggleShowSheet] = React.useState(false);
 	return (
 		<div
@@ -55,13 +55,15 @@ const Sheet = ({ index, sheetName = "Sheet" }) => {
 						)}
 					</span>
 				</button>
-				{showSheet && <SheetActionTray sheetId={`sheet_${index}`} />}
+				{showSheet && (
+					<SheetActionTray sheetId={`sheet_${index}`} {...rest} />
+				)}
 			</div>
 		</div>
 	);
 };
 
-const MultiSheets = ({ sheets = [] }) => {
+const MultiSheets = ({ sheets = [], ...rest }) => {
 	return (
 		<div className="multi-sheets sheets">
 			{sheets.map((sheetName, index) => {
@@ -70,6 +72,7 @@ const MultiSheets = ({ sheets = [] }) => {
 						key={index + 1}
 						index={index + 1}
 						sheetName={sheetName}
+						{...rest}
 					/>
 				);
 			})}
