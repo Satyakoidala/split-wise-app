@@ -5,7 +5,7 @@
 	margin: 20px auto;
 	padding-bottom: 20px;
 
-	@include viewport(small) {
+	@include viewport("small") {
 		margin: 20px auto;
 	}
 }
@@ -14,7 +14,7 @@
 	border-radius: 15px;
 	padding: 25px;
 
-	@include viewport(small) {
+	@include viewport("small") {
 		padding: 10px;
 	}
 }
@@ -22,7 +22,7 @@
 .expenses-summary {
 	font-size: 24px;
 
-	@include viewport(small) {
+	@include viewport("small") {
 		font-size: 20px;
 		height: 80px;
 	}
@@ -36,7 +36,7 @@
 		margin: 0;
 		width: 70px;
 
-		@include viewport(small) {
+		@include viewport("small") {
 			margin-bottom: 10px;
 		}
 	}
@@ -64,7 +64,7 @@
 	margin-block-start: 10px;
 	margin-block-end: 30px;
 
-	@include viewport(small) {
+	@include viewport("small") {
 		margin-block-start: 5px;
 		margin-block-end: 20px;
 	}

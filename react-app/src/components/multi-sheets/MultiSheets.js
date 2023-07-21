@@ -3,6 +3,7 @@ import cn from "classnames";
 import SheetActionTray from "./UserSection";
 
 import "./MultiSheets.scss";
+import { HeightTransition } from "../transition/Transitions";
 
 const Sheet = ({ index, sheetName = "Sheet", ...rest }) => {
 	const [showSheet, toggleShowSheet] = React.useState(false);
@@ -55,9 +56,10 @@ const Sheet = ({ index, sheetName = "Sheet", ...rest }) => {
 						)}
 					</span>
 				</button>
-				{showSheet && (
+
+				<HeightTransition entered={showSheet}>
 					<SheetActionTray sheetId={`sheet_${index}`} {...rest} />
-				)}
+				</HeightTransition>
 			</div>
 		</div>
 	);

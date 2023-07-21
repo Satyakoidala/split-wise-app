@@ -1,6 +1,7 @@
 import React from "react";
 import _ from "lodash";
 import MultiSheets from "./multi-sheets/MultiSheets";
+import FadeTransition from "./transition/Transitions";
 
 import "../styles/Common.scss";
 import "./Splitwise.scss";
@@ -139,81 +140,60 @@ const SplitWise = () => {
 
 	return (
 		<div className="split-wise-app">
-			{!getStarted ? (
-				<div className="app-intro">
-					<div className="left">
-						<Intro />
-					</div>
-					<div className="right">
-						<div className="lets-get-started">
-							<button
-								className="get-started-btn"
-								type="button"
-								onClick={() => toggleGetStarted(true)}
-							>
-								Lets get started!
-							</button>
+			<FadeTransition entered={!getStarted}>
+				{!getStarted && (
+					<div className="app-intro">
+						<div className="left">
+							<Intro />
+						</div>
+						<div className="right">
+							<div className="lets-get-started">
+								<button
+									className="get-started-btn"
+									type="button"
+									onClick={() => toggleGetStarted(true)}
+								>
+									Lets get started!
+								</button>
+							</div>
 						</div>
 					</div>
-				</div>
-			) : sheets.length === 0 ? (
-				<>
-					<div className="docs-on-get-started">
-						Lets create your first SplitWise expense sheet. Name the
-						memory that reminds you the bills.
-					</div>
-					<SheetNameInput
-						onSave={onSave}
-						onCancel={() => {
-							toggleGetStarted(false);
-						}}
-						isMobileView={isMobileView}
-					/>
-				</>
-			) : (
-				<>
-					<MultiSheets sheets={sheets} isMobileView={isMobileView} />
-					{sheets.length < MAX_SHEETS + 1 && (
-						<div className="add-sheet-form">
-							{!addSheet ? (
-								<button
-									type="button"
-									className="add-sheet-btn"
-									onClick={() => {
-										setAddSheet(true);
-									}}
-								>
-									<svg
-										viewBox="0 0 24 24"
-										width="32"
-										height="32"
-										stroke="currentColor"
-										strokeWidth="2"
-										fill="none"
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										className="css-i6dzq1"
-									>
-										<line
-											x1="12"
-											y1="5"
-											x2="12"
-											y2="19"
-										></line>
-										<line
-											x1="5"
-											y1="12"
-											x2="19"
-											y2="12"
-										></line>
-									</svg>
-								</button>
-							) : (
-								<>
+				)}
+			</FadeTransition>
+			<FadeTransition entered={getStarted && sheets.length === 0}>
+				{getStarted && sheets.length === 0 && (
+					<>
+						<div className="docs-on-get-started">
+							Lets create your first SplitWise expense sheet. Name
+							the memory that reminds you the bills.
+						</div>
+						<SheetNameInput
+							onSave={onSave}
+							onCancel={() => {
+								toggleGetStarted(false);
+							}}
+							isMobileView={isMobileView}
+						/>
+					</>
+				)}
+			</FadeTransition>
+			<FadeTransition entered={getStarted && sheets.length > 0}>
+				{getStarted && sheets.length > 0 && (
+					<>
+						<MultiSheets
+							sheets={sheets}
+							isMobileView={isMobileView}
+						/>
+						{sheets.length < MAX_SHEETS + 1 && (
+							<div className="add-sheet-form">
+								<FadeTransition entered={!addSheet}>
+									{/* {!addSheet && ( */}
 									<button
 										type="button"
-										className="cancel-add-sheet-btn"
-										onClick={onCancel}
+										className="add-sheet-btn"
+										onClick={() => {
+											setAddSheet(true);
+										}}
 									>
 										<svg
 											viewBox="0 0 24 24"
@@ -227,30 +207,67 @@ const SplitWise = () => {
 											className="css-i6dzq1"
 										>
 											<line
-												x1="18"
-												y1="6"
-												x2="6"
-												y2="18"
+												x1="12"
+												y1="5"
+												x2="12"
+												y2="19"
 											></line>
 											<line
-												x1="6"
-												y1="6"
-												x2="18"
-												y2="18"
+												x1="5"
+												y1="12"
+												x2="19"
+												y2="12"
 											></line>
 										</svg>
 									</button>
-									<SheetNameInput
-										onSave={onSave}
-										onCancel={onCancel}
-										isMobileView={isMobileView}
-									/>
-								</>
-							)}
-						</div>
-					)}
-				</>
-			)}
+									{/* )} */}
+								</FadeTransition>
+								<FadeTransition entered={addSheet}>
+									{addSheet && (
+										<>
+											<button
+												type="button"
+												className="cancel-add-sheet-btn"
+												onClick={onCancel}
+											>
+												<svg
+													viewBox="0 0 24 24"
+													width="32"
+													height="32"
+													stroke="currentColor"
+													strokeWidth="2"
+													fill="none"
+													strokeLinecap="round"
+													strokeLinejoin="round"
+													className="css-i6dzq1"
+												>
+													<line
+														x1="18"
+														y1="6"
+														x2="6"
+														y2="18"
+													></line>
+													<line
+														x1="6"
+														y1="6"
+														x2="18"
+														y2="18"
+													></line>
+												</svg>
+											</button>
+											<SheetNameInput
+												onSave={onSave}
+												onCancel={onCancel}
+												isMobileView={isMobileView}
+											/>
+										</>
+									)}
+								</FadeTransition>
+							</div>
+						)}
+					</>
+				)}
+			</FadeTransition>
 		</div>
 	);
 };

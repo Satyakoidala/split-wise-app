@@ -12,7 +12,7 @@
 	box-sizing: border-box;
 	overflow: auto;
 
-	@include viewport(small) {
+	@include viewport("small") {
 		justify-content: center;
 	}
 
@@ -23,7 +23,7 @@
 		border-radius: 18px;
 		padding: 10px;
 
-		@include viewport(small) {
+		@include viewport("small") {
 			margin-bottom: 0;
 			width: 85%;
 		}
@@ -33,7 +33,7 @@
 		margin-block: 20px;
 		width: 60%;
 
-		@include viewport(small) {
+		@include viewport("small") {
 			width: 90%;
 			flex-direction: row;
 			justify-content: space-evenly;
@@ -42,7 +42,7 @@
 		button {
 			font-size: 14px;
 
-			@include viewport(small) {
+			@include viewport("small") {
 				font-size: 20px;
 			}
 		}
@@ -65,7 +65,7 @@
 		margin-block: 20px;
 		width: 80%;
 
-		@include viewport(small) {
+		@include viewport("small") {
 			width: 100%;
 		}
 	}

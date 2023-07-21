@@ -1,6 +1,8 @@
 import React from "react";
 import reactDOM from "react-dom";
 
+import FadeTransition from "../transition/Transitions";
+
 import "./Overlay.scss";
 
 const UserDeleteConfirmOverlay = ({
@@ -97,17 +99,25 @@ const TransactionDeleteConfirmOverlay = ({
 	);
 };
 
-const ConfirmOverlay = ({ template, ...rest }) => {
+const ConfirmOverlay = ({ template, entered = false, ...rest }) => {
 	const overlay = document.getElementById("overlay");
 
 	let OverlayComponent;
 
 	switch (template) {
 		case "TRANSACTION_DELETE":
-			OverlayComponent = <TransactionDeleteConfirmOverlay {...rest} />;
+			OverlayComponent = (
+				<FadeTransition entered={entered}>
+					<TransactionDeleteConfirmOverlay {...rest} />
+				</FadeTransition>
+			);
 			break;
 		case "USER_DELETE":
-			OverlayComponent = <UserDeleteConfirmOverlay {...rest} />;
+			OverlayComponent = (
+				<FadeTransition entered={entered}>
+					<UserDeleteConfirmOverlay {...rest} />
+				</FadeTransition>
+			);
 			break;
 
 		default:

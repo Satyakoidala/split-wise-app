@@ -8,11 +8,11 @@
 		background-color: $secondary-bg;
 		border-radius: 10px;
 
-		@include viewport(medium) {
+		@include viewport("medium") {
 			width: 95%;
 		}
 
-		@include viewport(small) {
+		@include viewport("small") {
 			width: 95%;
 		}
 	}
@@ -22,11 +22,11 @@
 		display: inherit;
 		align-items: center;
 
-		@include viewport(medium) {
+		@include viewport("medium") {
 			height: 40px;
 		}
 
-		@include viewport(small) {
+		@include viewport("small") {
 			height: 32px;
 		}
 	}
@@ -35,23 +35,23 @@
 		width: 48px;
 		height: 48px;
 
-		@include viewport(medium) {
+		@include viewport("medium") {
 			width: 40px;
 			height: 40px;
 		}
 
-		@include viewport(small) {
+		@include viewport("small") {
 			width: 32px;
 			height: 32px;
 		}
 
 		svg {
-			@include viewport(medium) {
+			@include viewport("medium") {
 				width: 40px;
 				height: 40px;
 			}
 
-			@include viewport(small) {
+			@include viewport("small") {
 				width: 32px;
 				height: 32px;
 			}
@@ -68,12 +68,12 @@
 		justify-content: space-between;
 		margin: 0 auto;
 
-		@include viewport(medium) {
+		@include viewport("medium") {
 			font-size: 32px;
 			padding: 10px;
 		}
 
-		@include viewport(small) {
+		@include viewport("small") {
 			font-size: 24px;
 			padding: 10px;
 		}

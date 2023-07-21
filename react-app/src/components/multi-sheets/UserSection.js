@@ -333,23 +333,25 @@ const SheetActionTray = ({
 										}}
 										transactions={user.transactions}
 									/>
-									{toBeDeletedUser &&
-										toBeDeletedUser === user.idx && (
-											<ConfirmOverlay
-												template="USER_DELETE"
-												username={user.name}
-												onClickedYes={() => {
-													onDeleteUser(user.idx);
-													if (toBeDeletedUser)
-														setToBeDeletedUser(
-															null
-														);
-												}}
-												onClickedNo={() => {
-													setToBeDeletedUser(null);
-												}}
-											/>
-										)}
+									{/* {toBeDeletedUser &&
+										toBeDeletedUser === user.idx && ( */}
+									<ConfirmOverlay
+										entered={
+											toBeDeletedUser &&
+											toBeDeletedUser === user.idx
+										}
+										template="USER_DELETE"
+										username={user.name}
+										onClickedYes={() => {
+											onDeleteUser(user.idx);
+											if (toBeDeletedUser)
+												setToBeDeletedUser(null);
+										}}
+										onClickedNo={() => {
+											setToBeDeletedUser(null);
+										}}
+									/>
+									{/* )} */}
 								</div>
 							);
 						})}

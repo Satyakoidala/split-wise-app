@@ -123,41 +123,43 @@ export const TransactionsList = ({
 					})}
 				</tbody>
 			</table>
-			{showEditOverlay && (
-				<EditOverlay
-					{...currEditTransaction.current}
-					onClose={() => {
-						currEditTransaction.current = {};
-						toggleShowEditOverlay(false);
-					}}
-					onUpdate={(id, amount, info) => {
-						editTransaction(
-							id,
-							amount,
-							info,
-							currEditTransaction.current.editPurchaseAmount
-						);
-						currEditTransaction.current = {};
-						toggleShowEditOverlay(false);
-					}}
-				/>
-			)}
-			{showDeleteConfirmOverlay && (
-				<ConfirmOverlay
-					template="TRANSACTION_DELETE"
-					{...currEditTransaction.current}
-					onClose={() => {
-						currEditTransaction.current = {};
-						toggleDeleteConfirmOverlay(false);
-					}}
-					onDelete={(id, amount) => {
-						deleteTransaction(id, amount);
+			{/* {showEditOverlay && ( */}
+			<EditOverlay
+				entered={showEditOverlay}
+				{...currEditTransaction.current}
+				onClose={() => {
+					currEditTransaction.current = {};
+					toggleShowEditOverlay(false);
+				}}
+				onUpdate={(id, amount, info) => {
+					editTransaction(
+						id,
+						amount,
+						info,
+						currEditTransaction.current.editPurchaseAmount
+					);
+					currEditTransaction.current = {};
+					toggleShowEditOverlay(false);
+				}}
+			/>
+			{/* )} */}
+			{/* {showDeleteConfirmOverlay && ( */}
+			<ConfirmOverlay
+				entered={showDeleteConfirmOverlay}
+				template="TRANSACTION_DELETE"
+				{...currEditTransaction.current}
+				onClose={() => {
+					currEditTransaction.current = {};
+					toggleDeleteConfirmOverlay(false);
+				}}
+				onDelete={(id, amount) => {
+					deleteTransaction(id, amount);
 
-						currEditTransaction.current = {};
-						toggleDeleteConfirmOverlay(false);
-					}}
-				/>
-			)}
+					currEditTransaction.current = {};
+					toggleDeleteConfirmOverlay(false);
+				}}
+			/>
+			{/* )} */}
 		</>
 	) : null;
 };
