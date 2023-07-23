@@ -21,5 +21,7 @@ module.exports = {
 		"no-nested-ternary": "off",
 		"import/no-extraneous-dependencies": "off",
 		"react/no-array-index-key": "off",
+		"import/no-dynamic-require": "off",
+		"global-require": "off",
 	},
 };
