@@ -3,7 +3,11 @@ import cn from "classnames";
 
 import "./Transition.scss";
 
-export const HeightTransition = ({ entered = false, children }) => {
+export const HeightTransition = ({
+	entered = false,
+	children,
+	classnames = [],
+}) => {
 	const elementStyles = !entered
 		? {
 				height: "0",
@@ -14,6 +18,7 @@ export const HeightTransition = ({ entered = false, children }) => {
 			className={cn([
 				"height-transition",
 				entered ? "transition-entered" : "transition-exited",
+				...classnames,
 			])}
 			style={elementStyles}
 		>
@@ -22,12 +27,13 @@ export const HeightTransition = ({ entered = false, children }) => {
 	);
 };
 
-const FadeTransition = ({ entered = false, children }) => {
+const FadeTransition = ({ entered = false, children, classnames = [] }) => {
 	return (
 		<div
 			className={cn([
 				"fade-transition",
 				entered ? "transition-entered" : "transition-exited",
+				...classnames,
 			])}
 		>
 			{children}
