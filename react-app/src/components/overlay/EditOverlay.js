@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import reactDOM from "react-dom";
 
+import FadeTransition from "../transition/Transitions";
+
 import "./Overlay.scss";
 
 const TransactionEditOverlay = ({
@@ -73,12 +75,17 @@ const TransactionEditOverlay = ({
 	);
 };
 
-const EditOverlay = ({ ...rest }) => {
+const EditOverlay = ({ entered = false, ...rest }) => {
 	const overlay = document.getElementById("overlay");
 
 	return (
 		overlay &&
-		reactDOM.createPortal(<TransactionEditOverlay {...rest} />, overlay)
+		reactDOM.createPortal(
+			<FadeTransition entered={entered}>
+				<TransactionEditOverlay {...rest} />
+			</FadeTransition>,
+			overlay
+		)
 	);
 };
 

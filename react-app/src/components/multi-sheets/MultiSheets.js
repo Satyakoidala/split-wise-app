@@ -3,8 +3,9 @@ import cn from "classnames";
 import SheetActionTray from "./UserSection";
 
 import "./MultiSheets.scss";
+import { HeightTransition } from "../transition/Transitions";
 
-const Sheet = ({ index, sheetName = "Sheet" }) => {
+const Sheet = ({ index, sheetName = "Sheet", ...rest }) => {
 	const [showSheet, toggleShowSheet] = React.useState(false);
 	return (
 		<div
@@ -55,13 +56,16 @@ const Sheet = ({ index, sheetName = "Sheet" }) => {
 						)}
 					</span>
 				</button>
-				{showSheet && <SheetActionTray sheetId={`sheet_${index}`} />}
+
+				<HeightTransition entered={showSheet}>
+					<SheetActionTray sheetId={`sheet_${index}`} {...rest} />
+				</HeightTransition>
 			</div>
 		</div>
 	);
 };
 
-const MultiSheets = ({ sheets = [] }) => {
+const MultiSheets = ({ sheets = [], ...rest }) => {
 	return (
 		<div className="multi-sheets sheets">
 			{sheets.map((sheetName, index) => {
@@ -70,6 +74,7 @@ const MultiSheets = ({ sheets = [] }) => {
 						key={index + 1}
 						index={index + 1}
 						sheetName={sheetName}
+						{...rest}
 					/>
 				);
 			})}

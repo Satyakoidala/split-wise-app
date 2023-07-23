@@ -10,7 +10,7 @@
 	bottom: 30px;
 	left: 20px;
 
-	@include viewport(small) {
+	@include viewport("small") {
 		bottom: 20px;
 		right: 0;
 		left: 0;

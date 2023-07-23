@@ -4,8 +4,9 @@
 	font-size: 24px;
 	padding: 10px;
 	line-height: 1.2;
+	max-width: 85%;
 
-	@include viewport(small) {
+	@include viewport("small") {
 		font-size: 16px;
 	}
 
@@ -15,7 +16,7 @@
 		font-weight: 500;
 		color: swatch("forest-green");
 
-		@include viewport(small) {
+		@include viewport("small") {
 			font-size: 24px;
 		}
 	}
@@ -26,18 +27,18 @@
 	width: 95%;
 	position: inherit;
 
-	@include viewport(medium) {
+	@include viewport("medium") {
 		margin-block: 6rem;
 	}
 
 	.docs-on-get-started {
 		font-size: 28px;
 
-		@include viewport(medium) {
+		@include viewport("medium") {
 			font-size: 24px;
 		}
 
-		@include viewport(small) {
+		@include viewport("small") {
 			font-size: 20px;
 		}
 	}
@@ -50,11 +51,11 @@
 		align-items: center;
 		border-radius: 15px;
 
-		@include viewport(medium) {
+		@include viewport("medium") {
 			padding: 2rem 0;
 		}
 
-		@include viewport(small) {
+		@include viewport("small") {
 			padding: 2rem;
 			flex-direction: column;
 			row-gap: 20px;
@@ -63,7 +64,11 @@
 		.left {
 			width: 70%;
 
-			@include viewport(small) {
+			@include viewport("medium-plus") {
+				border-right: solid 2px;
+			}
+
+			@include viewport("small") {
 				width: 100%;
 			}
 		}
@@ -71,7 +76,7 @@
 		.right {
 			width: 30%;
 
-			@include viewport(small) {
+			@include viewport("small") {
 				width: 100%;
 			}
 		}
@@ -81,7 +86,7 @@
 			font-size: 16px;
 			padding: 10px;
 
-			@include viewport(small) {
+			@include viewport("small") {
 				padding: 5px;
 			}
 
@@ -91,12 +96,19 @@
 		}
 	}
 
+	.add-sheet-btn {
+		color: swatch("forest-green");
+	}
+
+	.cancel-add-sheet-btn {
+		color: swatch("fire-red");
+	}
+
 	.add-sheet-btn,
 	.cancel-add-sheet-btn {
 		width: 40px;
 		height: 40px;
 		padding: 0;
-		color: swatch("fire-red");
 		border-radius: 50%;
 		position: relative;
 
@@ -108,13 +120,13 @@
 			right: 0;
 			margin: auto;
 
-			@include viewport(small) {
+			@include viewport("small") {
 				width: 24px;
 				height: 24px;
 			}
 		}
 
-		@include viewport(small) {
+		@include viewport("small") {
 			width: 32px;
 			height: 32px;
 		}
@@ -124,11 +136,11 @@
 		width: 80%;
 		padding: 15px;
 
-		@include viewport(medium) {
+		@include viewport("medium") {
 			width: 90%;
 		}
 
-		@include viewport(small) {
+		@include viewport("small") {
 			width: 90%;
 		}
 
@@ -141,12 +153,12 @@
 			legend {
 				font-size: 18px;
 
-				@include viewport(small) {
+				@include viewport("small") {
 					font-size: 12px;
 				}
 			}
 
-			@include viewport(small) {
+			@include viewport("small") {
 				padding: 0;
 				font-size: 12px;
 			}
@@ -165,9 +177,16 @@
 			color: transparent;
 		}
 
-		@include viewport(small) {
+		@include viewport("small") {
 			padding: 0;
 			font-size: 16px;
 		}
+	}
+
+	.input-sheet-actions {
+		display: flex;
+		justify-content: space-around;
+		width: 95%;
+		margin-top: 20px;
 	}
 }

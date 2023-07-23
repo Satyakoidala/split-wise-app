@@ -1,0 +1,33 @@
+.fade-transition {
+	opacity: 0;
+	transition: opacity 1.5s ease-in-out;
+
+	&.transition-entered {
+		opacity: 1;
+	}
+
+	&.transition-exited {
+		opacity: 0;
+		display: none;
+	}
+}
+
+.height-transition {
+	transition: height 0.4s ease-in-out;
+
+	&.transition-entered {
+		overflow: visible;
+
+		div[data-core-height-transition-content] {
+			overflow: visible;
+		}
+	}
+
+	&.transition-exited {
+		display: none;
+	}
+
+	div[data-core-height-transition-content] {
+		overflow: hidden;
+	}
+}

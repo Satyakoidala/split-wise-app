@@ -8,6 +8,95 @@ import util from "../Utils";
 
 import "./UserSection.scss";
 import ConfirmOverlay from "../overlay/ConfirmOverlay";
+import FadeTransition, { HeightTransition } from "../transition/Transitions";
+
+const ActiveUsersTab = ({
+	users = [],
+	isMobileView = false,
+	activeUserID = null,
+	setActiveUserID = (f) => f,
+}) => {
+	const [showUserList, toggleShowUserList] = useState(false);
+	const activeUserName =
+		activeUserID !== null && users.find((x) => x.idx === activeUserID).name;
+
+	return (
+		<div className="user-names">
+			{users.length > 1 &&
+				(isMobileView ? (
+					<>
+						<div className="select-user-header">Selected User:</div>
+						<div className="select-user-dropdown">
+							<button
+								type="button"
+								className={cn([
+									"select-user-btn",
+									showUserList ? "arrow-up" : "arrow-down",
+								])}
+								onClick={() => {
+									toggleShowUserList((prev) => !prev);
+								}}
+							>
+								{activeUserID === null
+									? "Select from List"
+									: activeUserName}
+							</button>
+							<HeightTransition
+								entered={showUserList}
+								classnames={["select-user-dropdown-content"]}
+							>
+								<ul className="dropdown-content">
+									{users.map((user, index) => {
+										return (
+											<li key={index}>
+												<button
+													type="button"
+													className={cn(
+														"user-name-list-btn",
+														{
+															active:
+																user.idx ===
+																activeUserID,
+														}
+													)}
+													onClick={() => {
+														setActiveUserID(
+															user.idx
+														);
+														toggleShowUserList(
+															(prev) => !prev
+														);
+													}}
+												>
+													{user.name}
+												</button>
+											</li>
+										);
+									})}
+								</ul>
+							</HeightTransition>
+						</div>
+					</>
+				) : (
+					users.map((user) => {
+						return (
+							<button
+								type="button"
+								className={cn("user-name-btn", {
+									active: user.idx === activeUserID,
+								})}
+								onClick={() => {
+									setActiveUserID(user.idx);
+								}}
+							>
+								{user.name}
+							</button>
+						);
+					})
+				))}
+		</div>
+	);
+};
 
 const useActionTray = (id) => {
 	const NO_OF_USERS_LS_NAME = `${id}_no_of_users`;
@@ -30,15 +119,13 @@ const useActionTray = (id) => {
 	}, [noOfUsers, users]);
 
 	const addUser = (name) => {
+		const newUser = {
+			idx: uuidv4(),
+			name: `${name.toUpperCase()}`,
+			transactions: [],
+		};
 		setNoOfUsers(noOfUsers + 1);
-		setUsers([
-			...users,
-			{
-				idx: uuidv4(),
-				name: `${name.toUpperCase()}`,
-				transactions: [],
-			},
-		]);
+		setUsers([...users, newUser]);
 	};
 
 	const removeUser = (idx) => {
@@ -142,7 +229,11 @@ const useActionTray = (id) => {
 	};
 };
 
-const SheetActionTray = ({ title, sheetId = "sheet-x" }) => {
+const SheetActionTray = ({
+	title,
+	sheetId = "sheet-x",
+	isMobileView = false,
+}) => {
 	const userSectionRef = useRef();
 	const [totalExpense, setTotalExpense] = useState(0);
 	const {
@@ -159,6 +250,13 @@ const SheetActionTray = ({ title, sheetId = "sheet-x" }) => {
 	const nameRef = useRef();
 	const [hasError, toggleHasError] = useState(false);
 	const [toBeDeletedUser, setToBeDeletedUser] = useState(null);
+	const [activeUserID, setActiveUserID] = useState(null);
+	const activeUserTabProps = {
+		users,
+		isMobileView,
+		activeUserID,
+		setActiveUserID,
+	};
 	const errorText = useRef("");
 
 	useEffect(() => {
@@ -167,7 +265,13 @@ const SheetActionTray = ({ title, sheetId = "sheet-x" }) => {
 			.flat()
 			.reduce((sum, x) => sum + x.amount, 0);
 		setTotalExpense(currTotal);
+		if (users.length > 0) setActiveUserID(users[0].idx);
 	}, []);
+
+	useEffect(() => {
+		if (users.length > 0) setActiveUserID(users[users.length - 1].idx);
+		else if (users.length === 0) setActiveUserID(null);
+	}, [users.length]);
 
 	const onDeleteUser = (id) => {
 		const removedUser = removeUser(id);
@@ -208,6 +312,29 @@ const SheetActionTray = ({ title, sheetId = "sheet-x" }) => {
 		toggleShowUserInput(false);
 	};
 
+	const addUserActionsMarkup = (
+		<>
+			<button
+				className="save-btn"
+				type="button"
+				onClick={(ev) => {
+					onSave(ev);
+				}}
+			>
+				Save
+			</button>
+			<button
+				className="cancel-btn"
+				type="button"
+				onClick={(ev) => {
+					onCancel(ev);
+				}}
+			>
+				Cancel
+			</button>
+		</>
+	);
+
 	return (
 		<div className="action-tray">
 			{title && <h2 className="sheet-header">{title}</h2>}
@@ -229,101 +356,108 @@ const SheetActionTray = ({ title, sheetId = "sheet-x" }) => {
 						id="users"
 						ref={userSectionRef}
 					>
+						<ActiveUsersTab {...activeUserTabProps} />
 						{users.map((user) => {
 							return (
-								<div
-									className={cn(
-										"user-view",
-										`user-${user.idx}`
-									)}
-									key={user.idx}
+								<FadeTransition
+									entered={user.idx === activeUserID}
 								>
-									<button
-										type="button"
-										className="delete-usr"
-										onClick={(ev) => {
-											ev.stopPropagation();
-											setToBeDeletedUser(user.idx);
-										}}
-									>
-										X
-									</button>
-									<TransactionsInput
-										key={user.idx}
-										username={user.name}
-										avg={Math.round(
-											totalExpense / noOfUsers
+									<div
+										className={cn(
+											"user-view",
+											`user-${user.idx}`
 										)}
-										editTransaction={(
-											transactionID,
-											amount,
-											purchaseInfo
-										) => {
-											editTransaction(
-												user.idx,
+										key={user.idx}
+									>
+										<button
+											type="button"
+											className="delete-usr"
+											onClick={(ev) => {
+												ev.stopPropagation();
+												setToBeDeletedUser(user.idx);
+											}}
+										>
+											X
+										</button>
+										<TransactionsInput
+											key={user.idx}
+											username={user.name}
+											avg={Math.round(
+												totalExpense / noOfUsers
+											)}
+											editTransaction={(
 												transactionID,
 												amount,
 												purchaseInfo
-											);
-											const previousAmount =
-												user.transactions.find(
-													(x) =>
-														x.transactionID ===
-														transactionID
-												).amount;
-											setTotalExpense(
-												totalExpense -
-													previousAmount +
-													amount
-											);
-										}}
-										updateTotalExpense={(amount) => {
-											setTotalExpense(
-												totalExpense + amount
-											);
-										}}
-										addNewTransaction={(
-											amount,
-											purchaseInfo
-										) => {
-											addTransaction(
-												user.idx,
+											) => {
+												editTransaction(
+													user.idx,
+													transactionID,
+													amount,
+													purchaseInfo
+												);
+												const previousAmount =
+													user.transactions.find(
+														(x) =>
+															x.transactionID ===
+															transactionID
+													).amount;
+												setTotalExpense(
+													totalExpense -
+														previousAmount +
+														amount
+												);
+											}}
+											updateTotalExpense={(amount) => {
+												setTotalExpense(
+													totalExpense + amount
+												);
+											}}
+											addNewTransaction={(
 												amount,
 												purchaseInfo
-											);
-										}}
-										deleteTransaction={(
-											transactionID,
-											amount
-										) => {
-											removeTransaction(
-												user.idx,
-												transactionID
-											);
-											setTotalExpense(
-												totalExpense - amount
-											);
-										}}
-										transactions={user.transactions}
-									/>
-									{toBeDeletedUser &&
-										toBeDeletedUser === user.idx && (
-											<ConfirmOverlay
-												template="USER_DELETE"
-												username={user.name}
-												onClickedYes={() => {
-													onDeleteUser(user.idx);
-													if (toBeDeletedUser)
-														setToBeDeletedUser(
-															null
-														);
-												}}
-												onClickedNo={() => {
+											) => {
+												addTransaction(
+													user.idx,
+													amount,
+													purchaseInfo
+												);
+											}}
+											deleteTransaction={(
+												transactionID,
+												amount
+											) => {
+												removeTransaction(
+													user.idx,
+													transactionID
+												);
+												setTotalExpense(
+													totalExpense - amount
+												);
+											}}
+											transactions={user.transactions}
+										/>
+										{/* {toBeDeletedUser &&
+										toBeDeletedUser === user.idx && ( */}
+										<ConfirmOverlay
+											entered={
+												toBeDeletedUser &&
+												toBeDeletedUser === user.idx
+											}
+											template="USER_DELETE"
+											username={user.name}
+											onClickedYes={() => {
+												onDeleteUser(user.idx);
+												if (toBeDeletedUser)
 													setToBeDeletedUser(null);
-												}}
-											/>
-										)}
-								</div>
+											}}
+											onClickedNo={() => {
+												setToBeDeletedUser(null);
+											}}
+										/>
+										{/* )} */}
+									</div>
+								</FadeTransition>
 							);
 						})}
 					</div>
@@ -334,9 +468,7 @@ const SheetActionTray = ({ title, sheetId = "sheet-x" }) => {
 						<br />
 						Remember, you can split the bills but not the
 							friendship. */}
-						{noOfUsers > 0 ? (
-							<>Tag your buddy now!!</>
-						) : (
+						{noOfUsers === 0 && (
 							<>
 								Tag yourself first and later you can add your
 								buddies.
@@ -352,7 +484,10 @@ const SheetActionTray = ({ title, sheetId = "sheet-x" }) => {
 								Add your buddy now!!
 							</>
 						) : (
-							<>Input your name and stay back to see the magic!</>
+							<>
+								Input your name and fill your purchases to see
+								the magic!
+							</>
 						)}
 					</div>
 				)}
@@ -367,24 +502,12 @@ const SheetActionTray = ({ title, sheetId = "sheet-x" }) => {
 								setName(e.target.value);
 							}}
 						/>
-						<button
-							className="save-btn"
-							type="button"
-							onClick={(ev) => {
-								onSave(ev);
-							}}
-						>
-							Save
-						</button>
-						<button
-							className="cancel-btn"
-							type="button"
-							onClick={(ev) => {
-								onCancel(ev);
-							}}
-						>
-							Cancel
-						</button>
+						{!isMobileView && addUserActionsMarkup}
+						{isMobileView && (
+							<div className="add-user-actions">
+								{addUserActionsMarkup}
+							</div>
+						)}
 					</div>
 				)}
 				{!showUserInput && (
